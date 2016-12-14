@@ -18,6 +18,12 @@ This document shows you how to use the R package **relectro** to analyze data fr
 
 The documentation contains examples that you can run on your own (linux) computer.
 
+## R
+You need to install R on your computer.
+With a computer running Ubuntu, run this in the terminal
+
+`sudo apt-get -y install r-base`
+
 ## Rstudio
 You should download the latest version of Rstudio to run the examples. You can obtain it [here](https://www.rstudio.com/products/rstudio/download3/).
 
@@ -30,7 +36,7 @@ To make the process as realistic as possible, there are two real databases that 
 
 You will need 9 Gb of free space on your device to use them.
 
-You can download the data my [Google drive](https://drive.google.com/open?id=0B54KF3oUGY18ODQ1bVc1MkpicG8).
+You can download the data from my [Google drive](https://drive.google.com/open?id=0B54KF3oUGY18ODQ1bVc1MkpicG8).
 The download button is usually in the top right corner.
 It might take a few minutes to download.
 My browser normally save the file in the `~/Downloads` directory.

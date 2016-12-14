@@ -1,6 +1,6 @@
 # Introduction {#intro}
 
-The main purpose of this document is to show you how to analyze data from electrophysiological experiments using the *relectro* R package. It will describe the main functionalities of *relectro*. 
+The main purpose of this document is to show you how to analyze data from electrophysiological experiments using the *relectro* R package. The document describes the main functionalities of *relectro*. 
 
 ## Why R and *relectro*
 
@@ -12,21 +12,21 @@ In the context of scientific work, this means that anyone can replicate your ana
 R also has other advantages. 
 It has probably the best support for statistical analysis and it can also generate pretty nice figures.
 
-It's main disadvantages are that it is pretty slow when compared to c codes, and some calculations are not easily done with the R language. 
+It's main disadvantages are that it is pretty slow when compared to c programs, and some calculations are not easily done with the R language. 
 
 This is where the *relectro* package kicks in. It provides a high-level interface for the analysis of electrophysiological data in R.
 Under the hood, key calculations are implemented in c.
 So you get the speed of c, but with a much simplified interface.
 
-The other motivation for *relectro* is to promote the *re-use* of code. 
-Therefore, we solve every bug only once, and the next user benefits from the work. 
+The other motivation behind *relectro* is to promote the *re-use* of code. 
+We want to solve every bug once, and the next user should benefit from it. 
 There is no need (or time) for each lab member to reinvent the wheel.
 
 
 ## Scope
 
 This document is not an introduction to R. 
-If you have no experience with R, I would recommand doing a couple of tutorials online.
+If you have no experience with R, I recommand doing a couple of tutorials online.
 A very good book is [The Art of R Programming: A Tour of Statistical Software Design](https://www.amazon.de/Art-Programming-Statistical-Software-Design/dp/1593273843/ref=sr_1_1?ie=UTF8&qid=1481745150&sr=8-1&keywords=r+programming).
 
 ## Organization
@@ -41,7 +41,7 @@ Once you are familiar with the content, you can use this document as a quick ref
 The first step is to launch RStudio. 
 If you have not used RStudio before, you might want to read or watch a quick tutorial online.
 
-The first thing you need to use *relectro* is to load it into your R session.
+The first thing you need to use *relectro* is to load *relectro* into your R session.
 You do this by running the code in the gray box below.
 This should be done each time you start a new R session. 
 Otherwise, you will not have access to the functions provided by *relectro*
