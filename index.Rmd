@@ -21,13 +21,22 @@ The documentation contains examples that you can run on your own (linux) compute
 ## Rstudio
 You should download the latest version of Rstudio to run the examples. You can obtain it [here](https://www.rstudio.com/products/rstudio/download3/).
 
+
 ## relectro
 You need to install the relectro package. The instructions can be found on the [online repository](https://github.com/kevin-allen/relectro). You might have to scroll down to see the instructions.
 
 ## databases
 To make the process as realistic as possible, there are two real databases that will be used in the examples. 
-You can download from my [Google drive](https://drive.google.com/open?id=0B54KF3oUGY18ODQ1bVc1MkpicG8).
 
-Uncompress the document with 
+You will need 9 Gb of free space on your device to use them.
+
+You can download the data my [Google drive](https://drive.google.com/open?id=0B54KF3oUGY18ODQ1bVc1MkpicG8).
+The download button is usually in the top right corner.
+It might take a few minutes to download.
+My browser normally save the file in the `~/Downloads` directory.
+
+From a terminal, you can uncompress the document with 
 `tar -xf data_relectro_doc.tar.gz`
 
+Alternatively, you can try to right click on the compressed file, and click on `extract here`.
+This will create a directory called data_relectro_doc containing the data.

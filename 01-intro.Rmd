@@ -1,21 +1,72 @@
 # Introduction {#intro}
 
-You can label chapter and section titles using `{#label}` after them, e.g., we can reference Chapter \@ref(intro). If you do not manually label them, there will be automatic labels anyway, e.g., Chapter \@ref(methods).
+The main purpose of this document is to show you how to analyze data from electrophysiological experiments using the *relectro* R package. It will describe the main functionalities of *relectro*. 
 
-Figures and tables with captions will be placed in `figure` and `table` environments, respectively.
+## Why R and *relectro*
 
-```{r nice-fig, fig.cap='Here is a nice figure!', out.width='80%', fig.asp=.75, fig.align='center'}
-par(mar = c(4, 4, .1, .1))
-plot(pressure, type = 'b', pch = 19)
+There are several different alternative environments to do analysis of electropysiological data.
+I decided to use R because it is distributed under GNU general public license. 
+This means that it will always be available and that we don't depend on a company to give us the permission to use it.
+In the context of scientific work, this means that anyone can replicate your analysis without having to buy software.
+
+R also has other advantages. 
+It has probably the best support for statistical analysis and it can also generate pretty nice figures.
+
+It's main disadvantages are that it is pretty slow when compared to c codes, and some calculations are not easily done with the R language. 
+
+This is where the *relectro* package kicks in. It provides a high-level interface for the analysis of electrophysiological data in R.
+Under the hood, key calculations are implemented in c.
+So you get the speed of c, but with a much simplified interface.
+
+The other motivation for *relectro* is to promote the *re-use* of code. 
+Therefore, we solve every bug only once, and the next user benefits from the work. 
+There is no need (or time) for each lab member to reinvent the wheel.
+
+
+## Scope
+
+This document is not an introduction to R. 
+If you have no experience with R, I would recommand doing a couple of tutorials online.
+A very good book is [The Art of R Programming: A Tour of Statistical Software Design](https://www.amazon.de/Art-Programming-Statistical-Software-Design/dp/1593273843/ref=sr_1_1?ie=UTF8&qid=1481745150&sr=8-1&keywords=r+programming).
+
+## Organization
+
+This document is organized in chapters.
+One topic is covered in each chapter and it assumes that you are familiar with the previous chapters.
+
+Once you are familiar with the content, you can use this document as a quick reference.
+
+## Let's get started
+
+The first step is to launch RStudio. 
+If you have not used RStudio before, you might want to read or watch a quick tutorial online.
+
+The first thing you need to use *relectro* is to load it into your R session.
+You do this by running the code in the gray box below.
+This should be done each time you start a new R session. 
+Otherwise, you will not have access to the functions provided by *relectro*
+```{r intro}
+library(relectro)
 ```
 
-Reference a figure by its code chunk label with the `fig:` prefix, e.g., see Figure \@ref(fig:nice-fig). Similarly, you can reference tables generated from `knitr::kable()`, e.g., see Table \@ref(tab:nice-tab).
+*relectro* is an object-oriented package. 
+This means that as a user you will be creating objects and applying functions to these objects.
+For example, you can create an object of the class RecSession to represent one recording session.
+This might sound rather abstract but it will become clear in the next chapter.
 
-```{r nice-tab, tidy=FALSE}
-knitr::kable(
-  head(iris, 20), caption = 'Here is a nice table!',
-  booktabs = TRUE
-)
+
+You can have a look at all classes and functions that are part of *relectro*.
+```{r listObjects,echo=TRUE,results='hide'}
+ls("package:relectro")
+```
+I am not showing the results here to save space but you should see a list of more than 150 objects.
+The names of the classes start with an upper case letter (e.g. RecSession) whereas the names of functions and methods start a lower case letter (e.g. loadRecSession).
+
+
+The exsiting classes in *relectro* are
+```{r listClasses,echo=FALSE}
+ls("package:relectro")[grep("^[[:upper:]]",ls("package:relectro"))]
 ```
 
-You can write citations, too. For example, we are using the **bookdown** package [@R-bookdown] in this sample book, which was built on top of R Markdown and **knitr** [@xie2015].
+The next chapters cover these objects and show you how to manipulate them.
+
