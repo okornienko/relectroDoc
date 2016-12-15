@@ -22,7 +22,7 @@ The documentation contains examples that you can run on your own (linux) compute
 You need to install R on your computer.
 With a computer running Ubuntu, run this in the terminal
 
-`sudo apt-get -y install r-base`
+`sudo apt-get -y install r-base r-base-dev`
 
 ## Rstudio
 You should download the latest version of Rstudio to run the examples. You can obtain it [here](https://www.rstudio.com/products/rstudio/download3/).
