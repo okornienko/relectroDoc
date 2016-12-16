@@ -1,0 +1,70 @@
+# RecSession
+
+A recording session consists of several electrophysiological data files recorded from one mouse on a given day.
+The session directory also contains several other configuration files. 
+We will use the recroding session `jp19841-10072015-0108` as an example.
+On my computer, the path of this directory is
+`~/Downloads/data_relectro_doc/circular_arena/jp19841/jp19841-10072015-0108`
+
+The directory of the recording session contains several files. You can list them from within R
+
+```{R session_files}
+list.files(path="~/Downloads/data_relectro_doc/circular_arena/jp19841/jp19841-10072015-0108")
+```
+
+If you want to know what information these files contain, have a look at the file `~/Downloads/data_relectro_doc/file_description`
+
+
+One role of the RecSession object in *relectro* is to read several of these files to gather the properties of the recording.
+Instead of reading all these files while programing, you just get the information from the RecSession object.
+
+## Create a RecSession object
+
+Let's create a RecSession object to represent our recording session.
+
+```{r RecSession}
+library(relectro)
+## assign the name of the session to a variable called session
+session="jp19841-10072015-0108"
+## assign the session directory to a variable called datadir
+datadir="~/Downloads/data_relectro_doc/circular_arena/jp19841/jp19841-10072015-0108"
+## create a RecSession object
+rs<-new("RecSession",session=session,path=datadir)
+## print the content of rs
+print(rs)
+```
+
+Now we have an object called `rs` that represents our recording session.
+However, most of the attributes in `rs` are not assigned.
+To gather the properties of the recording session, you need to call the function `loadRecSession`.
+
+```{R loadRecSession}
+rs<-loadRecSession(rs)
+```
+
+Here, the result of the function `loadRecSession()` is assigned to `rs`.
+The function `loadRecSession` returns a new RecSession object with all session properties.
+If you print the new value of `rs` to the screen, you can read information regarding your recording session.
+
+```{R print_rs}
+print(rs)
+```
+
+You can now read that the sampling rate during this session was `r rs@samplingRate` Hz and that the lenght of the session was `r rs@sessionDurationSec` sec.
+
+## Access attributes of RecSession objects
+
+All classes in *relectro* are S4 classes. 
+This means that you can access their attributes with `@`.
+For example, you can get the sampling rate with `rs@samplingRate`. 
+Here is how to get a list of all the attributes of an object in R.
+```{R eval=FALSE}
+attributes(rs)
+## or
+?RecSession
+```
+Now that you have a list of the attributes, here is how you can access them.
+```{R access_attributes}
+rs@animalName
+rs@nChannels
+```
