@@ -91,3 +91,9 @@ containsElectrodeLocation(rs,location="ca1")
 containsEnvironment(rs,environment="circ")
 ```
 
+## Source code of methods
+You can inspect the code of the method `recordingDate`.
+```{R getMethod_recordingDate}
+getMethod("recordingDate","RecSession")
+```
+This is very usefull if the method is not working as you expect and you want to understand why.

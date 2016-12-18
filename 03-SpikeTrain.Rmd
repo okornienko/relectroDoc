@@ -59,6 +59,15 @@ print(st@meanFiringRate)
 ```
 This is the mean firing rate of all neurons in the SpikeTrain object for the entire recording session.
 
+If you are curious and wants to see the code of the `meanFiringRate` method, use getMethod.
+```{R seeCode}
+getMethod("meanFiringRate","SpikeTrain")
+```
+In this method, there is a call to the `.Call()` function. 
+This means that the firing rate is calculated using c code instead of within R. 
+The first argument of `.Call()` is `meanFiringRate_cwrap`, which is the name of a c function.
+If you have the source code of *relectro*, all c functions are defined in the directory `src`.
+
 ## Limit analysis to time intervals
 
 ## Limit analysis to some cells
