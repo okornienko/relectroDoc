@@ -12,7 +12,7 @@ Once a SpikeTrain object is set, you can use different functions to do analysis 
 Here is a list of all methods to work with a SpikeTrain object.
 
 
-### Create SpikeTrain objects 
+## Create SpikeTrain objects 
 
 Here is how to create a spike train object. We will use the RecSession object from the previous chapter.
 
@@ -40,7 +40,24 @@ print(paste("Sampling rate of st", st@samplingRate, "Hz"))
 print(paste("Number of cells in st:",st@nCells))
 ```
 
+## SpikeTrain Methods
+List the methods of the SpikeTrain class
+```{R methods_SpikeTrain}
+methods(class=SpikeTrain)
+```
+
 ## Mean firing rate
+Use `meanFiringRate` to calculate the mean firing rate of neurons.
+```{R meanFiringRate}
+st<-meanFiringRate(st)
+```
+The method `meanFiringRate` returns a SpikeTrain object. This new SpikeTrain object is assigned to `st`.
+
+You can access the firing rate values using `@`.
+```{R print_meanFiringRate}
+print(st@meanFiringRate)
+```
+This is the mean firing rate of all neurons in the SpikeTrain object for the entire recording session.
 
 ## Limit analysis to time intervals
 
