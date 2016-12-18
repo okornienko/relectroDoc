@@ -40,6 +40,12 @@ print(paste("Sampling rate of st", st@samplingRate, "Hz"))
 print(paste("Number of cells in st:",st@nCells))
 ```
 
+## Mean firing rate
+
+## Limit analysis to time intervals
+
+## Limit analysis to some cells
+
 ## Spike-time autocorrelation
 
 ## Spike-time crosscorrelation between cells
@@ -47,10 +53,6 @@ print(paste("Number of cells in st:",st@nCells))
 ## Spike-time crosscorrelation to events
 
 ## Instantaneous firing rate
-
-## Limit analysis to time intervals
-
-## Limit analysis to some cells
 
 
 <!-- st<-spikeTimeCrosscorrelation(st, -->
