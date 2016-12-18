@@ -70,6 +70,32 @@ If you have the source code of *relectro*, all c functions are defined in the di
 
 ## Limit analysis to time intervals
 
+It is often useful to limit the analysis to specific parts of the recording session.
+Time intervals are used for this purpose.
+Time is in sample values and not in seconds.
+
+To limit the analysis to some time intervals, you need to set these intervals in the SpikeTime object.
+By default, the intervals in the SpikeTime object are set from the beginning to the end of the recording session.
+```{R setIntervals}
+print(st)
+```
+You can see that there is `r length(st@startInterval)` interval set by default.
+Now we set the intervals to the second trial of the recording session.
+We use the RecSession object to get the start and end time of the second trial.
+The method `setIntervals` of the SpikeTime class let you set these intervals in a SpikeTime object.
+```{R setIntervals2}
+st<-setIntervals(st,rs@trialStartRes[2],rs@trialEndRes[2])
+print(st)
+```
+Now we have one interval of `r sum(st@endInterval-st@startInterval)/st@samplingRate` seconds in the `st` object.
+If you now recalculate the mean firing rate of the neurons, the analysis will be limited to the data within this interval.
+
+```{R setIntervals3}
+st<-meanFiringRate(st)
+print(st@meanFiringRate)
+```
+
+
 ## Limit analysis to some cells
 
 ## Spike-time autocorrelation
