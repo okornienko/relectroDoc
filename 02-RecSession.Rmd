@@ -15,8 +15,8 @@ list.files(path="~/Downloads/data_relectro_doc/circular_arena/jp19841/jp19841-10
 If you want to know what information these files contain, have a look at the file `~/Downloads/data_relectro_doc/file_description`
 
 
-One role of the RecSession object in *relectro* is to read several of these files to gather the properties of the recording.
-Instead of reading all these files while programing, you just get the information from the RecSession object.
+One role of the RecSession object in *relectro* is to read several of these files to gather the properties of the recording session.
+Instead of reading all these files while programing, you just get the information directly from the RecSession object.
 
 ## Create a RecSession object
 
@@ -52,6 +52,9 @@ print(rs)
 
 You can now read that the sampling rate during this session was `r rs@samplingRate` Hz and that the lenght of the session was `r rs@sessionDurationSec` sec.
 
+One side effect of calling the function `leadRecSession` is that it will check the validity of several configuration files that are create at recording time.
+If there are inconsistencies between configuration files, an error message appears and indicates what the problem is.
+
 ## Access attributes of RecSession objects
 
 All classes in *relectro* are S4 classes. 
@@ -68,3 +71,23 @@ Now that you have a list of the attributes, here is how you can access them.
 rs@animalName
 rs@nChannels
 ```
+
+## Methods
+To see the functions associated with RecSession object
+```{R RecSession_methods}
+methods(class=RecSession)
+```
+As indicated in the output, see `?methods` for acessing help.
+For example
+```{R RecSession_help}
+?recordingDate
+```
+
+The methods usual have a RecSession object as first argument
+``` {R RecSession_calling_method}
+recordingDate(rs)
+getIsClustered(rs)
+containsElectrodeLocation(rs,location="ca1")
+containsEnvironment(rs,environment="circ")
+```
+

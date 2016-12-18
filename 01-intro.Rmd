@@ -26,8 +26,9 @@ There is no need (or time) for each lab member to reinvent the wheel.
 ## Scope
 
 This document is not an introduction to R. 
-If you have no experience with R, I recommand doing a couple of tutorials online.
-A very good book is [The Art of R Programming: A Tour of Statistical Software Design](https://www.amazon.de/Art-Programming-Statistical-Software-Design/dp/1593273843/ref=sr_1_1?ie=UTF8&qid=1481745150&sr=8-1&keywords=r+programming).
+If you have no experience with R, I recommand starting with a R tutorial.
+The [R blogger website](https://www.r-bloggers.com/how-to-learn-r-2/) is a great place to start.
+Alternatively, a very good book is [The Art of R Programming: A Tour of Statistical Software Design](https://www.amazon.de/Art-Programming-Statistical-Software-Design/dp/1593273843/ref=sr_1_1?ie=UTF8&qid=1481745150&sr=8-1&keywords=r+programming).
 
 ## Organization
 
