@@ -95,8 +95,42 @@ st<-meanFiringRate(st)
 print(st@meanFiringRate)
 ```
 
+You could calculate the difference in firing rate between the second and third trials. 
+```{R compareMeanFiringRate}
+## get a SpikeTrain object with intervals set at 3rd trial
+st3<-setIntervals(st,rs@trialStartRes[3],rs@trialEndRes[3])
+## get firing rate with SpikeTrain, limited to 3rd trial
+st3<-meanFiringRate(st3)
+print(st3@meanFiringRate)
+## print the difference in firing rate between 
+## trial 2 and 3
+st3@meanFiringRate-st@meanFiringRate
+```
 
 ## Limit analysis to some cells
+
+It is sometimes useful to perform some analysis to a subset of cells. 
+For example, you could want to analyze only cells with a firing rate higher than 2 Hz during the second trial.
+All you have to do is to set the attribute `cellList` in the SpikeTrain object.
+By defaut, the `cellList` attribute of the SpikeTrain object includes all recorded neurons.
+```{R setCellList}
+## set intervals to 2nd trial (was already set to these intervals)
+st<-setIntervals(st,rs@trialStartRes[2],rs@trialEndRes[2])
+print(st@cellList)
+## which cells have mean friring rate above 2 in 2nd trial
+st@meanFiringRate>2
+## get the cluster number of these cells
+st@cellList[st@meanFiringRate>2]
+## set the new cellList in the st object
+st<-setCellList(st,st@cellList[st@meanFiringRate>2])
+print(st@cellList)
+## now analysis will be performed only on these cells
+## get the firing rate during the fourth trial
+st<-setIntervals(st,rs@trialStartRes[4],rs@trialEndRes[4])
+st<-meanFiringRate(st)
+print(st@meanFiringRate)
+```
+
 
 ## Spike-time autocorrelation
 
@@ -106,7 +140,7 @@ print(st@meanFiringRate)
 
 ## Instantaneous firing rate
 
-
+## Simulated spike trains
 <!-- st<-spikeTimeCrosscorrelation(st, -->
 <!--                               binSizeMs=1, -->
 <!--                               windowSizeMs = 200, -->
