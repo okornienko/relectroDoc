@@ -9,9 +9,6 @@ Note that you can also set the data manually with `setSpikeTrain()`. This featur
 
 Once a SpikeTrain object is set, you can use different functions to do analysis on the spike trains. For example you can calculate spike-train autocorrelations using the function `spikeTimeAutocorrelation()`. You can also calculate the firing rate using `meanFiringRate()`.
 
-Here is a list of all methods to work with a SpikeTrain object.
-
-
 ## Create SpikeTrain objects 
 
 Here is how to create a spike train object. We will use the RecSession object from the previous chapter.
@@ -25,8 +22,6 @@ datadir="~/Downloads/data_relectro_doc/circular_arena/jp19841/jp19841-10072015-0
 ## create a RecSession object
 rs<-new("RecSession",session=session,path=datadir)
 rs<-loadRecSession(rs)
-
-
 # create SpikeTrain object and load data
 st<-new("SpikeTrain",session=rs@session,path=rs@path)
 st<-loadSpikeTrain(st) # load res clu and sampling rate
