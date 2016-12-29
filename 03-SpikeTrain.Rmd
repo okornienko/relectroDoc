@@ -1,3 +1,4 @@
+
 # SpikeTrain
 This chapter documents the use of the SpikeTrain class. 
 SpikeTrain object represents the spike trains of a group of neurons recorded in the same recording session. 
@@ -256,8 +257,6 @@ print(st@meanFiringRate)
 rm(clu,res1,res2,res3,df,st)
 
 ```
-
-
 
 
 ## Programming exercises

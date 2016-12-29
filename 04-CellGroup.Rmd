@@ -1,0 +1,44 @@
+# CellGroup
+This chapter documents the use of the CellGroup class. 
+The CellGroup class is relatively simple. 
+Its main function is to allow you to get the tetrode id and brain region associated with each recorded neuron.
+It aslo gives you the tetrode-specific cluster id of a neuron.
+
+## Create CellGroup object 
+
+Here is how to use it.
+
+```{r real_spike_trains}
+library(relectro)
+## assign the name of the session to a variable called session
+session="jp19841-10072015-0108"
+## assign the session directory to a variable called datadir
+datadir="~/Downloads/data_relectro_doc/circular_arena/jp19841/jp19841-10072015-0108"
+## create a RecSession object
+rs<-new("RecSession",session=session,path=datadir)
+rs<-loadRecSession(rs)
+# create CellGroup object and load data
+cg<-new("CellGroup",session=rs@session,path=rs@path,nTetrodes=rs@nElectrodes)
+cg<-loadCellGroup(cg) # load info from files
+print(cg)
+```
+
+Notice that you need to specify the number of tetrodes when creating the CellGroup object, otherwise you won't be able to load the data from the files.
+
+## CellGroup Methods
+List the methods of the SpikeTrain class
+```{R cellGroupMethods}
+methods(class=CellGroup)
+```
+
+## Tetrode id for a neuron
+
+You might want to know in which brain region a neuron was recorded from. 
+You can either get it directly from the `brainRegion` attribute or with the `brainRegionFromCluNo` method.
+
+```{R CellGroupBrainRegion}
+cg@brainRegion[which(cg@clu==2)]
+brainRegionFromCluNo(cg,2)
+```
+## Programming exercises
+
