@@ -34,7 +34,6 @@ Alternatively, a very good book is [The Art of R Programming: A Tour of Statisti
 
 This document is organized in chapters.
 One topic is covered in each chapter and it assumes that you are familiar with the previous chapters.
-
 Once you are familiar with the content, you can use this document as a quick reference.
 
 ## Let's get started

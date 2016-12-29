@@ -52,7 +52,7 @@ print(rs)
 
 You can now read that the sampling rate during this session was `r rs@samplingRate` Hz and that the lenght of the session was `r rs@sessionDurationSec` sec.
 
-One side effect of calling the function `leadRecSession` is that it will check the validity of several configuration files that are create at recording time.
+One side effect of calling the function `loadRecSession` is that it will check the validity of several configuration files that are create at recording time.
 If there are inconsistencies between configuration files, an error message appears and indicates what the problem is.
 
 ## Access attributes of RecSession objects
@@ -97,3 +97,38 @@ You can inspect the code of the method `recordingDate`.
 getMethod("recordingDate","RecSession")
 ```
 This is very usefull if the method is not working as you expect and you want to understand why.
+
+## Programing exercise
+
+Here is a short exercise to apply what you have learned in this chapter.
+
+You will explore a recording session from the linear_track project. In this experiment, there were 3 different environments. The animal could be either in an open field, in a rest box or on a linear track. You can find this information by looking at the `env` attribute of the RecSession object (`sqr70` for open field, `rest` for rest box, and `lt` for linear track).
+
+What was the time spent on the linear track in the recording session called `jp4103-30032016-0107`? The code for linear track in the "env" attribute of the recording session is "lt". Below is the answer. See if you can get the same answer yourself.
+```{R RecSessionExercise1,echo=FALSE}
+session="jp4103-30032016-0107"
+## assign the session directory to a variable called datadir
+datadir="~/Downloads/data_relectro_doc/linear_track/jp4103/jp4103-30032016-0107"
+## create a RecSession object
+rs<-new("RecSession",session=session,path=datadir)
+rs<-loadRecSession(rs)
+print(paste(sum(rs@trialDurationSec[which(rs@env=="lt")]),"sec"))
+```
+Tip: you need to use the attributes `trialDurationSec` and `env`.
+
+Keeping with the recording session `jp4103-30032016-0107`, what was the sampling rate?
+```{R RecSessionExercise2,echo=FALSE}
+print(paste(rs@samplingRate,"Hz"))
+```
+
+Get the time intervals in samples of the  begining and end of the trials with the linear track
+```{R RecSessionExercise3,echo=F}
+i<-which(rs@env=="lt")
+print(paste(rs@trialNames[i],":",rs@trialStartRes[i],rs@trialEndRes[i]))
+```
+Tip: Have a look at the `trialStartRes` and `trialEndRes` attributes.
+
+What is the recording date of this recording session?
+```{R RecSessionExercise4,echo=F}
+print(recordingDate(rs))
+```
