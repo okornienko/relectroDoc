@@ -126,7 +126,7 @@ Get the time intervals in samples of the  begining and end of the trials with th
 i<-which(rs@env=="lt")
 print(paste(rs@trialNames[i],":",rs@trialStartRes[i],rs@trialEndRes[i]))
 ```
-Tip: Have a look at the `trialStartRes` and `trialEndRes` attributes.
+Tip: Have a look at the `trialStartRes` and `trialEndRes` attributes, or use `getIntervalsEnvironment()`. 
 
 What is the recording date of this recording session?
 ```{R RecSessionExercise4,echo=F}

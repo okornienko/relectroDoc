@@ -261,3 +261,46 @@ rm(clu,res1,res2,res3,df,st)
 
 ## Programming exercises
 
+As there is nothing like learning by doing, here are a few exercises that review what has been presented in this chapter. 
+
+We will work on the recording session called `jp4103-30032016-0107` from the linear_track experiment. 
+First create the RecSession and SpikeTrain objects for this session. Load the information from the files for both objects.
+
+```{R SpikeTrainExercise1,echo=FALSE}
+session="jp4103-30032016-0107"
+datadir="~/Downloads/data_relectro_doc/linear_track/jp4103/jp4103-30032016-0107"
+rs<-new("RecSession",session=session,path=datadir)
+rs<-loadRecSession(rs)
+st<-new("SpikeTrain",session=rs@session,path=rs@path)
+st<-loadSpikeTrain(st) # load res clu and sampling rate
+```
+
+Print the mean firing rate of all the neurons of the recording session for all trials during which the animal was on the linear track.
+
+```{R SpikeTrainExercise2,echo=FALSE}
+st<-setIntervals(st,s=rs@trialStartRes[which(rs@env=="lt")],
+             e=rs@trialEndRes[which(rs@env=="lt")])
+st<-meanFiringRate(st)
+print(st@meanFiringRate)
+```
+Tip: You need to get the start and end intervals for the trials in which the animal was on the linear track, set the intervals in the SpikeTrain object, and get the mean firing rate.
+
+Calculate the spike-time autocorrelation of the neuron with the cluster id `2` for trials on the linear track and trials in the rest box. The autocorrelation should have bins of 2 ms and extend from -400 to 400 ms. Use probability instead of spike count.
+
+Plot the results to compare the two spike-time autocorrelation.
+
+```{R RecSessionExercise4,echo=F}
+st<-setCellList(st,cellList = 2)
+st<-setIntervals(st,s=rs@trialStartRes[which(rs@env=="lt")],
+             e=rs@trialEndRes[which(rs@env=="lt")])
+st<-spikeTimeAutocorrelation(st,binSizeMs = 2,windowSizeMs = 400,probability = T)
+auto.lt<-st@auto
+st<-setIntervals(st,s=rs@trialStartRes[which(rs@env=="rest")],
+             e=rs@trialEndRes[which(rs@env=="rest")])
+st<-spikeTimeAutocorrelation(st,binSizeMs = 2,windowSizeMs = 400,probability = T)
+plot(st@autoTimePoints,st@auto,type='l',
+     xlab="Time (ms)",ylab="Spike probability")
+lines(st@autoTimePoints,auto.lt,col="red")
+legend(x=-300, y = 0.2,legend = c("Rest","Lin. track"),col=c(1,2),lwd=1,bty="n")
+```
+Notice the stronger theta rhythmicity during trials on the linear track.

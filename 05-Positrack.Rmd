@@ -3,15 +3,18 @@
 This chapter documents the use of the Positrack class of the relectro package. 
 Positrack objects are used to represent the path of the animal during a recording session. 
 The data are loaded from the `.px_per_cm`, `.res_samples_per_whl_sample`, `.sampling_rate_dat`, and `.whd` files. 
+The x and y position of the animal is in the attributes `x` and `y`.
+The values are in cm.
+The head direction data are in `hd`.
+The values varies from 0 to 360.
 
 ## Create Positrack object 
 
 ```{r real_spike_trains}
 library(relectro)
 ## assign the name of the session to a variable called session
-session="jp19841-10072015-0108"
-## assign the session directory to a variable called datadir
-datadir="~/Downloads/data_relectro_doc/circular_arena/jp19841/jp19841-10072015-0108"
+session="jp4103-30032016-0107"
+datadir="~/Downloads/data_relectro_doc/linear_track/jp4103/jp4103-30032016-0107"
 ## create a RecSession object
 rs<-new("RecSession",session=session,path=datadir)
 rs<-loadRecSession(rs)
@@ -28,8 +31,45 @@ List the methods of the Positrack class
 methods(class=Positrack)
 ```
 
+We will not cover all methods. If you are curious, remember that you can get the documentation of the methods with `?`, as in `?getIntervalsAtSpeed`.
+
+## Time intervals at speed
+
+It is often useful to limit your analysis to time period during which the animal is running at a specific speed.
+You can get time intervals when the animal's speed is within some speed values with `getIntervalsAtSpeed`.
+You could get the firing rate of neurons for periods of near immobility and running periods.
+
+```{R PositrackTime}
+st<-new("SpikeTrain",session=rs@session,path=rs@path)
+st<-loadSpikeTrain(st) # load res clu and sampling rate
+## get time interval that the animal ran between 0 and 3 cm per sec
+m<-getIntervalsAtSpeed(pt,0,3)
+st<-setIntervals(st,m)
+st<-meanFiringRate(st)
+print(st@meanFiringRate)
+m<-getIntervalsAtSpeed(pt,10,100)
+st<-setIntervals(st,m)
+st<-meanFiringRate(st)
+print(st@meanFiringRate)
+```
 
 
+## Plot the animal path
 
-## Programming exercises
+You can see the position data of the positrack object by plotting them.
+We will use the method `getIntervalsEnvironment` of the RecSession class to plot the data of different environment separately.
 
+```{R PositrackPlot}
+pt1<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,env="lt"))
+plot(pt1@x,pt1@y,xlim=c(0,90),ylim=c(0,90),type='l')
+
+pt2<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,env="sqr70"))
+plot(pt2@x,pt2@y,xlim=c(0,90),ylim=c(0,90),type='l')
+
+pt3<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,env="rest"))
+plot(pt3@x,pt3@y,xlim=c(0,90),ylim=c(0,90),type='l')
+```
+
+Notice that there are two rest boxes. This is because the experimenter did not place the rest box exactly at the same location during the different trials. Best practice is to *always* place an environment at the same location! 
+
+Positrack objects are often used when analysing the spatial properties of neurons. This is covered in the next chapter.
