@@ -1,14 +1,16 @@
 
 # SpikeTrain
 This chapter documents the use of the SpikeTrain class. 
-SpikeTrain object represents the spike trains of a group of neurons recorded in the same recording session. 
+A SpikeTrain object represents the spike trains of a group of neurons recorded in the same recording session. 
 The spike trains are usually loaded from files containing the spike times in sample values, the id of the cell firing and the sampling rate. 
 You have to call the function `loadSpikeTrain()` to read the data from the files. 
 The 3 files from which the data are loaded have the extension `res`, `clu` and `sampling_rate_dat`. 
 
 Note that you can also set the data manually with `setSpikeTrain()`. This feature is usefull if you want to work with simulated spike trains. 
 
-Once a SpikeTrain object is set, you can use different functions to do analysis on the spike trains. For example you can calculate spike-train autocorrelations using the function `spikeTimeAutocorrelation()`. You can also calculate the firing rate using `meanFiringRate()`.
+Once a SpikeTrain object is set, you can use different functions to do analysis on the spike trains. 
+For example, you can calculate spike-train autocorrelations using the function `spikeTimeAutocorrelation()`. 
+You can also calculate the firing rate using `meanFiringRate()`.
 
 ## Create SpikeTrain objects 
 

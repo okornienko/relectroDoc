@@ -10,18 +10,17 @@ This means that it will always be available and that we don't depend on a compan
 In the context of scientific work, this means that anyone can replicate your analysis without having to buy software.
 
 R also has other advantages. 
-It has excellent support for statistical analysis and it can generate pretty nice figures.
+It has excellent support for statistical analysis and it generates nice figures.
 
-It's main disadvantages are that it is pretty slow when compared to c programs, and some calculations are not easily done with the R language. 
+It's main disadvantages are that it is slow when compared to c programs, and some calculations are not easily done with the R language. 
 
 This is where the *relectro* package kicks in. It provides a high-level interface for the analysis of electrophysiological data in R.
 Under the hood, key calculations are implemented in c.
 So you get the speed of c, but with a much simplified interface.
 
 The other motivation behind *relectro* is to promote the *re-use* of code within the lab. 
-We want to solve every bug once, and the next user should benefit from it. 
+We want to solve every bug once, and the next users should benefit from it. 
 There is no need (or time) for each lab member to reinvent the wheel.
-
 
 ## Scope
 
@@ -34,7 +33,7 @@ Alternatively, a very good book is [The Art of R Programming: A Tour of Statisti
 
 This document is organized in chapters.
 One topic is covered in each chapter and it assumes that you are familiar with the previous chapters.
-Once you are familiar with the content, you can use this document as a quick reference.
+Once you are familiar with all chapters, this document can be used as a quick reference.
 
 ## Let's get started
 
@@ -42,18 +41,19 @@ The first step is to launch RStudio.
 If you have not used RStudio before, you might want to read or watch a quick tutorial online.
 
 The first thing you need to use *relectro* is to load *relectro* into your R session.
-You do this by running the code in the gray box below.
 This should be done each time you start a new R session. 
 Otherwise, you will not have access to the functions provided by *relectro*
+
+You load *relectro* by running the code in the gray box below.
+Throughout this document, the content of these boxes is R code that you should run on your computer.
 ```{r intro}
 library(relectro)
 ```
 
 *relectro* is an object-oriented package. 
-This means that as a user you will be creating objects and applying functions to these objects.
-For example, you can create an object of the class RecSession to represent one recording session.
+This means that, as a user, you create objects and apply functions on these objects.
+For example, you can create an object of the class RecSession to represent a recording session.
 This might sound rather abstract but it will become clear in the next chapter.
-
 
 You can have a look at all classes and functions that are part of *relectro*.
 ```{r listObjects,echo=TRUE,results='hide'}

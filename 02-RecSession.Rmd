@@ -1,7 +1,9 @@
 # RecSession
 
-A recording session consists of several electrophysiological data files recorded from one mouse on a given day.
-The session directory also contains several other configuration files. 
+A recording session consists of several electrophysiological data files recorded from one animal on a given day.
+All these files are in the same directory.
+The name of the directory is the name of the recording session.
+The session directory contains several data and configuration files. 
 We will use the recroding session `jp19841-10072015-0108` as an example.
 On my computer, the path of this directory is
 `~/Downloads/data_relectro_doc/circular_arena/jp19841/jp19841-10072015-0108`

@@ -1,0 +1,145 @@
+# SpatialProperties2d
+
+This chapter documents the use of the SpatialProperties2d class of the relectro package. 
+SpatialProperties2d objects are used to make firing rate maps. 
+They can give you the statistics associated with the maps. 
+You can also get the spatial autocorrelation of the maps.
+
+## Create a SpatialProperties2d object
+
+SpatialProperties2d objects are used together with RecSession, SpikeTrain and Positrack objects.
+We create these 4 objects.
+
+```{r sp2d_create}
+library(relectro)
+## assign the name of the session to a variable called session
+session="jp4298-18022016-0106"
+datadir="~/Downloads/data_relectro_doc/linear_track/jp4298/jp4298-18022016-0106"
+# create a RecSession object
+rs<-new("RecSession",session=session,path=datadir)
+rs<-loadRecSession(rs)
+# create Positrack object and load data
+pt<-new("Positrack",session=session,path=datadir)
+pt<-loadPositrack(pt)
+# create SpikeTrain object and load data
+st<-new("SpikeTrain",session=rs@session,path=rs@path)
+st<-loadSpikeTrain(st) # load res clu and sampling rate
+# create a SpatialProerties2d object
+sp<-new("SpatialProperties2d")
+```
+
+When doing analysis, it is often the case that you need to use several *relectro* objects.
+To simplify the process, you can call a single function that returns a list with all *relectro* objects associated with a recording session.
+
+```{R sp2d_create2}
+# create a RecSession object
+rs<-new("RecSession",session=session,path=datadir)
+rs<-loadRecSession(rs)
+# get all other relectro objects
+myList<-getRecSessionObjects(rs)
+pt<-myList$pt
+st<-myList$st
+sp<-myList$sp
+```
+
+This makes the code more compact.
+
+## SpatialProperties2d Methods
+List the methods of the SpatialProperties2d class
+```{R SpatialProperties2dMethods}
+methods(class=SpatialProperties2d)
+```
+
+We will not cover all methods. If you are curious, remember that you can get the documentation of the methods with `?`, as in `?getMapStats`.
+
+## Make firing rate maps
+
+Firing rate maps are used to visualize the firing rate of a neuron in a 2D environment. Making the firing rate maps is relatively easy. You set the time interval in the SpikeTrain object to limit the analysis to some time period and then make the maps. 
+```{R sp2d_maps}
+st.lt<-setIntervals(st,getIntervalsEnvironment(rs,environment = "sqr70"))
+sp<-firingRateMap2d(sp,st.lt,pt)
+print(sp)
+```
+
+By default, the bins in the map are 2x2 cm or 4 cm$^2$. The standard deviation of the smoothing kernels is 3 cm. These settings should work for most experiments. These variable could be changed by modifying the attributes of the SpatialProperties2d objects: `smoothOccupancySd`,`smoothRateMapSd` and `cmPerBin`
+
+The data of the firing rate maps are stored in the `maps` attributes and the occupancy map in in the attribute `occupancy`.
+
+## Plot firing rate maps
+
+The maps are saved in an array called `maps`. You probably want to have a look at the map now.
+There are two functions in *relectro* to do this: `firingRateMapPlot()` and `firingRateMapsPlot()`
+```{R, sp2d_maps1, fig.width=2.5, fig.height=2.5}
+firingRateMapPlot(sp@maps[,,1])
+```
+```{R sp2d_maps2, fig.width=6,fig.height = 8}
+firingRateMapsPlot(sp@maps,names=st@cellList)
+```
+
+## Map statistics
+
+There are several variables that describe the firing patterns in the firing rate maps: 
+
+```{R sp2d_stats,results="hide"}
+sp<-getMapStats(sp,st.lt,pt)
+## if you are curious to see the function code, use getMethod()
+getMethod("getMapStats","SpatialProperties2d")
+```
+
+With the getMapStats, you get the peak firing rate, information score, sparsity score, border score, grid score and grid spacing of each map. They are stored in the attributes of the SpatialProperties2d object.
+
+You can easily access the results with the `@`.
+
+```{R sp2d_stats1}
+print(sp@peakRate)
+print(sp@infoScore)
+print(sp@gridScore)
+```
+
+
+## Shuffling procedure to get chance levels
+
+To get the chance levels for these scores, a shuffling procedure is often used. 
+The procedure consists of recalculating the statistics several time (e.g. 100 times). 
+For each of these calculations, the position data are shifted randomly in time. 
+Thus, the relationship between the spike and the position of the animals is changed.
+After all calculations, we get a distribution of statistics when the position of the spike is random.
+This can be used to get a significance threshold. 
+
+```{R sp2dShuffle}
+sp@nShufflings<-100 # would normally be at least 500
+sp<-getMapStatsShuffle(sp,st.lt,pt)
+hist(sp@infoScoreShuffle,xlim=c(0,1)) # show the distribution
+statThreshold<-quantile(sp@infoScoreShuffle,probs = 0.95) # get threshold
+print(paste("The 0.95 quantile is",statThreshold))
+print("cells with significant infromation score:")
+print(st@cellList[sp@infoScore>statThreshold])
+```
+
+The function takes a few seconds as it needs to calculate `r length(sp@infoScore)*sp@nShufflings` firing rate maps and spatial autocorrelations.
+
+## Spatial autocorrelations
+
+You probably noticed that the neuron with the cluster id `8` looks like a grid cell.
+To highlight the 60 degree regularity in the map, we usually use spatial autocorrelations.
+You need to calculate the firing rate maps and then get the spatial autocorrelations
+
+```{R sp2d_autocorrelation}
+sp<-firingRateMap2d(sp,st.lt,pt)
+sp<-mapSpatialAutocorrelation(sp)
+firingRateMapAutoPlot(sp@autos[,,which(st@cellList==8)])
+```
+
+There is also the function `firingRateMapAutosPlot()` to plot all spatial autocorrelation.
+
+## Spikes on path
+
+It is often beneficial to look at raw data to better appreciate the quality of the data. 
+In the case of spatially selective neurons, this means to look at the path of the animal together with the spikes.
+
+```{R sp2d_spikesOnPath}
+pt2<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,env="sqr70"))
+sop<-spikeOnPath(sp,st.lt,pt2)
+spikeOnPathPlot(sop,clu=8)
+```
+
