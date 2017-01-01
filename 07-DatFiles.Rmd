@@ -1,0 +1,63 @@
+# DatFiles
+
+Electrophysiological recordings are saved in `.dat` files. 
+There is one `.dat` file per trial, but a session usually contains several `.dat` files.
+These files are not text files but binary files. 
+To read the raw data from `.dat` files, use the DatFiles class.
+
+## Create a Datfiles object
+
+You can create a `DatFiles` object with the `new()` or `getRecSessionObjects()` functions. 
+
+There is no `.dat` files in our database because it would make the size of the database too large.
+In the example, you can change the path to a directory containing `.dat` files.
+
+```{r df_create, eval=FALSE}
+library(relectro)
+## assign the name of the session to a variable called session
+session="jp4298-18022016-0106"
+datadir="~/Downloads/data_relectro_doc/linear_track/jp4298/jp4298-18022016-0106"
+# create a RecSession object
+rs<-new("RecSession",session=session,path=datadir)
+rs<-loadRecSession(rs)
+
+# create the datFiles object
+df<-new("DatFiles")
+df<-datFilesSet(df,
+                fileNames=paste(rs@trialNames,"dat",sep="."),
+                path=rs@path,
+                nChannels=rs@nChannels)
+
+# or use the getRecSessionObjects
+myList<-getRecSessionObjects(rs)
+df<-myList$df
+```
+
+## DatFiles Methods
+List the methods of the DatFiles class
+```{R dfdMethods,eval=F}
+methods(class=DatFiles)
+```
+
+There are very few methods for the DatFile class.
+
+## Read .dat files
+
+You read `.dat` files with the `datFilesGetChannels`. The function returns a matrix containing the data, one channel per column. Here is an example to read channel 0.
+
+```{R dfRead, eval=F}
+x<-datFilesGetChannels(df,channels=0, firstSample = 0, lastSample = rs@trialEndRes[rs@nTrials])
+```
+
+## Detect TTL pulses
+
+Events that occurs during recording (e.g. light changing, licking events, rewards, etc.) are often logged as TTL pulses in the `.dat` files.
+You can easily get the time of these events.
+All you need to know is on which channels these events were recorded.
+The function `detectUp` and `detectDown` are used to detect the rising and falling phase of TTL pulses.
+The values that are returned by the function are in data samples and not seconds.
+
+```{R dfTTL, eval=F}
+up<-detectUps(x) ## detect rising times of ttl pulses
+down<-detectDowns(x) ## detect falling time of ttl pulses
+```

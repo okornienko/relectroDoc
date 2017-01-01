@@ -52,7 +52,7 @@ methods(class=SpatialProperties2d)
 
 We will not cover all methods. If you are curious, remember that you can get the documentation of the methods with `?`, as in `?getMapStats`.
 
-## Make firing rate maps
+## Firing rate maps
 
 Firing rate maps are used to visualize the firing rate of a neuron in a 2D environment. Making the firing rate maps is relatively easy. You set the time interval in the SpikeTrain object to limit the analysis to some time period and then make the maps. 
 ```{R sp2d_maps}
