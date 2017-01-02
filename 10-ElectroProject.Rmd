@@ -1,0 +1,21 @@
+# ElectroProject
+
+So far, the objects presented are build to operate on a single recording session.
+However, projects usually contains several recording sessions.
+The ElectroProject is a class that represents you projects.
+It contains a useful method to join data from the single recording sessions into a single dataset.
+
+## Create a ElectroProject object
+
+You can create an `ElectroProject` object with the `new()` function. 
+
+```{r EP_create}
+library(relectro)
+
+```
+
+## ElectroProject Methods
+List the methods of the ElectroProject class
+```{R EPMethods}
+methods(class=ElectroProject)
+```

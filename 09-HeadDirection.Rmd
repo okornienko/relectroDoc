@@ -1,0 +1,49 @@
+# HeadDirection
+
+This class is used to analyze the influence of head direction on the firing rate of neurons.
+
+## Create a HeadDirection object
+
+You can create a `HeadDirection` object with the `new()` or `getRecSessionObjects()` functions. 
+
+```{r hd_create}
+library(relectro)
+## assign the name of the session to a variable called session
+session="jp4298-18022016-0106"
+datadir="~/Downloads/data_relectro_doc/linear_track/jp4298/jp4298-18022016-0106"
+# create a RecSession object
+rs<-new("RecSession",session=session,path=datadir)
+rs<-loadRecSession(rs)
+
+# or use the getRecSessionObjects
+myList<-getRecSessionObjects(rs)
+pt<-myList$pt
+st<-myList$st
+hd<-myList$hd
+```
+
+## HeadDirection Methods
+List the methods of the HeadDirection class
+```{R hddMethods}
+methods(class=HeadDirection)
+```
+
+## HeadDirection rate histogram
+```{R hdHisto}
+## set intervals in the SpikeTrain object to limit the analysis to trials in the sqr70
+st<-setIntervals(st,s=getIntervalsEnvironment(rs,env="sqr70"))
+hd<-headDirectionHisto(hd,st,pt)
+```
+
+## Plot HeadDirection rate histograms
+```{R hdHistoPlot}
+headDirectionPolarPlot(hd@histo[,3])
+headDirectionPolarPlots(hd@histo,names=st@cellList)
+```
+
+## Head direction Stats
+
+```{R hdStats}
+hd<-headDirectionStats(hd,st,pt)
+hd<-headDirectionStatsShuffle(hd,st,pt)
+```

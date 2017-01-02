@@ -1,0 +1,50 @@
+# SpatialProperties1d
+
+The SpatialProperties1d class is used to create firing rate histograms for spatial data that have one dimension. 
+This class is used to analyze the spatial properties of neurons recorded as the animal ran on a linear track.
+
+
+## Create a SpatialProperties1d object
+
+You can create a `SpatialProperties1d` object with the `new()` or `getRecSessionObjects()` functions. 
+
+```{r 1d_create}
+library(relectro)
+## assign the name of the session to a variable called session
+session="jp4298-18022016-0106"
+datadir="~/Downloads/data_relectro_doc/linear_track/jp4298/jp4298-18022016-0106"
+# create a RecSession object
+rs<-new("RecSession",session=session,path=datadir)
+rs<-loadRecSession(rs)
+myList<-getRecSessionObjects(rs)
+st<-myList$st
+pt<-myList$pt
+sp1<-myList$sp1
+```
+
+## SpatialProperties1d Methods
+List the methods of the DatFiles class
+```{R 1dMethods}
+methods(class=SpatialProperties1d)
+```
+
+## Make 1d firing rate histograms
+
+In the example below, the firing rate histograms are made for the 2 running directions separately.
+The results are saved in two different SpatialProperties1d objects
+```{R 1dMaps}
+## keep only the data from the linear track and linearize
+ptlt<-setInvalidOutsideInterval(pt,s=getIntervalsEnvironment(rs,env="lt"))
+ptlt<-linearzeLinearTrack(ptlt)
+  
+# make maps for running direction 0
+dirInt<-getIntervalsAtDirection(ptlt,direction=0)
+st<-setIntervals(st,s=dirInt)
+sp1.0<-firingRateHisto(sp1,st,ptlt)
+# make maps for running direction 1
+dirInt<-getIntervalsAtDirection(ptlt,direction=1)
+st<-setIntervals(st,s=dirInt)
+sp1.1<-firingRateHisto(sp1,st,ptlt)
+```
+
+The results are in the slot `rateHisto` of the SpatialProperties1d objects.
