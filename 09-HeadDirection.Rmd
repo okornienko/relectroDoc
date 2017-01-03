@@ -36,8 +36,11 @@ hd<-headDirectionHisto(hd,st,pt)
 ```
 
 ## Plot HeadDirection rate histograms
-```{R hdHistoPlot}
+```{R hdHistoPlot,fig.width=2,fig.height = 2}
 headDirectionPolarPlot(hd@histo[,3])
+```
+
+```{R hdHistoPlot1,fig.width=6,fig.height = 8}
 headDirectionPolarPlots(hd@histo,names=st@cellList)
 ```
 

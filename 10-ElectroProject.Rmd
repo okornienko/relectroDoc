@@ -1,21 +1,215 @@
 # ElectroProject
 
-So far, the objects presented are build to operate on a single recording session.
+So far, the objects presented (e.g. RecSession, SpikeTrain, CellGroup, Positrack, etc.) operate on a single recording session.
 However, projects usually contains several recording sessions.
-The ElectroProject is a class that represents you projects.
-It contains a useful method to join data from the single recording sessions into a single dataset.
+The ElectroProject class represents you projects.
+It contains a list of the RecSession objects that makes up your project.
+The main purpose of the ElectroProject is to allow you to 1) run analysis of all your recording session and 2) merge the results from multiple recording sessions.
 
-## Create a ElectroProject object
+## Create an ElectroProject object
 
 You can create an `ElectroProject` object with the `new()` function. 
+Then you create the list of RecSession with `setSessionList()`. 
+The print method give you a summary of the recording sessions.
+This is a good way to keep track of whether all recording sessions have been clustered.
 
 ```{r EP_create}
 library(relectro)
 
+ep<-new("ElectroProject",directory="~/Downloads/data_relectro_doc/linear_track")
+ep<-setSessionList(ep)
+print(ep)
 ```
+
+If it takes time to set the session list, you can save the ElectroProject as a file and load it when you start a new R session.
+
+```{R epSave}
+# save to a file called ep
+save(ep,file=paste(ep@directory,"ep",sep="/")) 
+# load the file called ep
+load(file=paste(ep@directory,"ep",sep="/"))
+```
+
+This way, you create the ep object once and then comment the code out. 
+The next session you only run the `load()` function.
 
 ## ElectroProject Methods
 List the methods of the ElectroProject class
 ```{R EPMethods}
 methods(class=ElectroProject)
 ```
+
+## Session List
+
+To run some analysis on several recording sessions, you need a list of RecSession objects.
+You can get this from your ElectroProject object with the function `getSessionList`
+You can select recording sessions based on brain areas, recording environments or on whether they were clustered or not.
+
+```{R epSessionList}
+rss<-getSessionList(ep,clustered=T,region="mec",env="lt")
+rss<-sortRecSessionListChronologically(rss)
+print(paste("Number of recording sessions",length(rss)))
+rs<-rss[[11]] ## example of single session to play with
+print(rs)
+```
+
+Every RecSession object in the list contains all the parameters of this recording session.
+
+## Analysis of several recording sessions
+
+There are two steps involved in running code on several recording sessions.
+First, you write a function that will be applied to all recording sessions.
+Second, you apply this function to all your sessions.
+
+### Functions for single RecSession objects
+
+The first step is to write a function that will run on a single recording session. 
+This is really similar to what we did in previous chapters, the only difference is that we put the code into a function.
+We start with a simple example in which we just want to get the number of recorded neuron in each recording session.
+
+
+To write this function, it is often useful to test it on a single recording session. 
+This is why we got one out of our list with `rs<-rss[[11]]`.
+We will get the number of neurons from the `nCells` slot of the SpikeTrain object.
+
+
+```{R epFunction}
+st<-new("SpikeTrain",session=rs@session,path=rs@path)
+st<-loadSpikeTrain(st) # load res clu and sampling rate
+st@nCells
+```
+
+Now we just transform this code into a function called `nCellsSession`.
+
+```{R epFunction2}
+nCellsSession<-function(rs){
+  st<-new("SpikeTrain",session=rs@session,path=rs@path)
+  st<-loadSpikeTrain(st) # load res clu and sampling rate
+  return(list(nCells=st@nCells))
+}
+```
+
+The code is very similar. 
+An important point is to return the results as part of a list.
+You can test the function like this.
+
+```{R epFunction3}
+nCellsSession(rs)
+```
+
+You can return several results from the same function. 
+For example, we will now return the number of cells and the number of tetrodes.
+
+```{R epFunction4}
+nCellsSession<-function(rs){
+  st<-new("SpikeTrain",session=rs@session,path=rs@path)
+  st<-loadSpikeTrain(st) # load res clu and sampling rate
+  return(list(nCells=st@nCells,nTetrode=rs@nElectrodes))
+}
+nCellsSession(rs)
+```
+
+You can also return much more data. 
+For example, you can analyze several spatial properties of neurons and return their firing rate maps.
+In this case, we return an array and a data.frame.
+
+```{R epFunction5}
+spatialScores<-function(rs){
+ ## load the data in R
+  myList<-getRecSessionObjects(rs)
+  st<-myList$st
+  pt<-myList$pt
+  cg<-myList$cg
+  sp<-myList$sp
+  hd<-myList$hd
+
+    ## get the position data for sqr70 
+  ptsqr70<-setInvalidOutsideInterval(pt,s=getIntervalsEnvironment(rs,env="sqr70"))
+  ## only keep data when the animal had a speed between 3 and 100 cm/sec
+  ptsqr70<-speedFilter(ptsqr70,minSpeed=3,maxSpeed = 100)
+  ## spatial properties during the sqr70 in order to identify the neurons
+  sp<-getMapStats(sp,st,ptsqr70) ## get info score, sparsity, border, grid score, etc.
+  ## head direction selectivity for open field, histo, vector length and shuffled ##
+  hd<-headDirectionStats(hd,st,ptsqr70)
+  ## get speed scores
+  st<-ifr(st)
+  sp<-speedScore(sp,st,ptsqr70,minSpeed=3,maxSpeed=100,runLm=F)
+  ## get mean firing rate of the neurons
+  st<-meanFiringRate(st)
+  ## create a data frame containing the data for each cell ##
+  cells<-data.frame(mouse=rs@animalName,session=rs@session,cell.id=cg@id,tetrode.id=cg@tetrodeId,region=cg@brainRegion,
+             clu.to.tet=cg@cluToTetrode,
+             mean.rate=st@meanFiringRate, 
+             info.score=sp@infoScore, border.score=sp@borderScore, grid.score=sp@gridScore,speed.score=sp@speedScore,
+             hd.vl=hd@vectorLength,hd.peak.rate=hd@peakRates)
+  ## create the spatial firing rate maps with a known size
+  sp<-firingRateMap2d(sp,st,ptsqr70,nRowMap = 40,nColMap = 40)
+  
+  ## return all firing rate maps and the data.frame with the score. 
+  return(list(sqr70.maps=sp@maps,
+       cells=cells))
+}
+res<-spatialScores(rs)
+print(res$cells)
+```
+
+### Run on sessions
+
+To get this data for all the recording sessions in our session list, you call `runOnSessions()`.
+This will apply a function to all recording sessions.
+Below we will apply it to the first 5 sessions, as a test.
+```{R epRun1}
+runOnSessionList(ep,
+                 sessionList=head(rss,n=5),
+                 fnct=spatialScores,
+                 save=T,overwrite=T)
+```
+
+### Collect results
+
+Notice that the results were saved in two files.
+The files are in a `results` directory located in the path of the ElectroProject object.
+The file names are the names of the elements in the list returned by the function.
+Here is how to load these files.
+
+```{R epLoad1}
+load(paste(ep@directory,"results","cells",sep="/"))
+print(paste("Number of cells:",length(cells$mean.rate)))
+print(cells$mean.rate)
+```
+
+You now have access to the data of several recording sessions in the same data.frame.
+You could also plot all firing rate maps.
+
+```{R epMap1,fig.width=6,fig.height = 8}
+load(paste(ep@directory,"results","sqr70.maps",sep="/"))
+firingRateMapsPlot(sqr70.maps[,,1:30],names=cells$cell.id[1:30])
+```
+
+## Parallel processing
+
+When the analysis performed on each recording session requires high processor usage, you can speed up the analysis by running the code on different computer threads.
+You can use the `snow` package to do this.
+If it is not install on your computer, try `install.packages("snow")`
+All you need to do is to create a cluster of threads, and then call `runOnSessions()` with the right arguments.
+
+```{R epPara}
+library(snow)
+workers<-c(rep("localhost",6))
+cl<-makeCluster(workers, type = "SOCK",outfile="")
+print(paste("Using",length(workers), "threads"))
+## load the relectro package on each thread
+clusterEvalQ(cl,library(relectro))
+runOnSessionList(ep,sessionList=head(rss,n=5),
+                 fnct=spatialScores,
+                 save=T,overwrite=T,
+                 parallel=T,cluster=cl) # tell the function to work in parallel
+stopCluster(cl) # stop the cluster when we are done
+rm(cl,workers)
+```
+
+In this case all the threads were on the same computer.
+You can use different computers by adding their ip addresses in the `workers` vector.
+All computers needs to run the save version of R and needs to have `relectro` installed.
+
+
