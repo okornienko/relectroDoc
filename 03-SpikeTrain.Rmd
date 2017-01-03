@@ -291,7 +291,7 @@ Calculate the spike-time autocorrelation of the neuron with the cluster id `2` f
 
 Plot the results to compare the two spike-time autocorrelation.
 
-```{R RecSessionExercise4,echo=F}
+```{R SpikeTrainExercise3,echo=F}
 st<-setCellList(st,cellList = 2)
 st<-setIntervals(st,s=rs@trialStartRes[which(rs@env=="lt")],
              e=rs@trialEndRes[which(rs@env=="lt")])

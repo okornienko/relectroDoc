@@ -213,3 +213,4 @@ You can use different computers by adding their ip addresses in the `workers` ve
 All computers needs to run the save version of R and needs to have `relectro` installed.
 
 
+

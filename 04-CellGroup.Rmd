@@ -8,7 +8,7 @@ It aslo gives you the tetrode-specific cluster id of a neuron.
 
 Here is how to use it.
 
-```{r real_spike_trains}
+```{r cgCreate}
 library(relectro)
 ## assign the name of the session to a variable called session
 session="jp19841-10072015-0108"

@@ -10,7 +10,7 @@ The values varies from 0 to 360.
 
 ## Create Positrack object 
 
-```{r real_spike_trains}
+```{r ptCreate}
 library(relectro)
 ## assign the name of the session to a variable called session
 session="jp4103-30032016-0107"
