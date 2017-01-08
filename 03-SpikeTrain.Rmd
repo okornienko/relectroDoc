@@ -93,6 +93,7 @@ st2<-meanFiringRate(st2)
 print(st2@meanFiringRate)
 ```
 
+
 You could calculate the difference in firing rate between the second and third trials. 
 ```{R compareMeanFiringRate}
 ## get a SpikeTrain object with intervals set at 3rd trial
@@ -104,6 +105,32 @@ print(st3@meanFiringRate)
 ## trial 2 and 3
 st3@meanFiringRate-st2@meanFiringRate
 ```
+
+### Time intervals from files
+
+Sometimes the intervals to limit the analysis are stored in a file located in the recording session directory.
+For example, in the circular_arena database, there is a file with the extension `light_trials_intervals` in each recording session directory. We will get its content by reading the file.
+```{R SpikeTrainIntervalFile}
+# get the file name from the RecSession object
+fileName<-paste(rs@fileBase,"light_trials_intervals",sep=".")
+df<-read.table(fileName,header=F) # read into a data.frame
+colnames(df)<-c("trialNo", "condition","start","end") # set the column name to simplify the code below
+head(df)
+```
+
+We now calculate the firing rate for periods in which the condition was `l1`.
+
+```{R SpikeTrainFile2}
+st.l1<-setIntervals(st,
+                 s=df$start[which(df$condition=="l1")],
+                 e=df$end[which(df$condition=="l1")])
+print(st.l1) ## check the number of intervals and interval time
+st.l1<-meanFiringRate(st.l1)
+print(st.l1@meanFiringRate)
+rm(df,st.l1) # delete objects that we don't need anymore.
+```
+
+
 
 ## Limit analysis to specific cells
 
@@ -257,7 +284,7 @@ lines(st@autoTimePoints,st@auto[,3],col="blue")
 st<-meanFiringRate(st)
 print(st@meanFiringRate)
 rm(clu,res1,res2,res3,df,st)
-
+rm(st1,st2,st3,st4)
 ```
 
 
@@ -305,4 +332,5 @@ plot(st@autoTimePoints,st@auto,type='l',
 lines(st@autoTimePoints,auto.lt,col="red")
 legend(x=-300, y = 0.2,legend = c("Rest","Lin. track"),col=c(1,2),lwd=1,bty="n")
 ```
+
 Notice the stronger theta rhythmicity during trials on the linear track.
