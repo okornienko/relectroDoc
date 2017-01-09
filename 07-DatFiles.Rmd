@@ -61,3 +61,14 @@ The values that are returned by the function are in data samples and not seconds
 up<-detectUps(x) ## detect rising times of ttl pulses
 down<-detectDowns(x) ## detect falling time of ttl pulses
 ```
+
+### Save TTL times into a file
+Detecting TTL pulses from `.dat` files takes time because `.dat` files are very large. 
+Therefore, it is often best to detect the TTL pulses and to save the times into a file for further analysis.
+In our previous example, we could save up into a file with the session name and the extension `ttlUp`
+
+```{R dfTTLSave,eval=F}
+write.table(up,file=paste(rs@fileBase,"ttlUp",sep="."),quote = FALSE,row.names = FALSE, col.names = FALSE)
+```
+
+Then this file can later be read using `read.table`. This is much faster than reading the data from the `.dat` files one more time.
