@@ -25,7 +25,7 @@ print(cg)
 
 Notice that you need to specify the number of tetrodes when creating the CellGroup object, otherwise you won't be able to load the data from the files.
 
-## CellGroup Methods
+## Methods
 List the methods of the SpikeTrain class
 ```{R cellGroupMethods}
 methods(class=CellGroup)

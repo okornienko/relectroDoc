@@ -25,7 +25,7 @@ pt<-loadPositrack(pt)
 print(pt)
 ```
 
-## Positrack Methods
+## Methods
 List the methods of the Positrack class
 ```{R PositrackMethods}
 methods(class=Positrack)

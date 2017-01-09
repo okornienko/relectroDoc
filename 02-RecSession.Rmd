@@ -57,7 +57,7 @@ You can now read that the sampling rate during this session was `r rs@samplingRa
 One side effect of calling the function `loadRecSession` is that it will check the validity of several configuration files that are create at recording time.
 If there are inconsistencies between configuration files, an error message appears and indicates what the problem is.
 
-## Access attributes of RecSession objects
+## Attributes of RecSession objects
 
 All classes in *relectro* are S4 classes. 
 This means that you can access their attributes with `@`.
@@ -74,8 +74,8 @@ rs@animalName
 rs@nChannels
 ```
 
-## RecSession methods
-Methods are functions that work on RecSession object. To list the methods of the RecSession class
+## Methods
+Methods are functions that are part of a class (e.g. RecSession). To list the methods of the RecSession class
 ```{R RecSession_methods}
 methods(class=RecSession)
 ```
@@ -85,7 +85,7 @@ For example
 ?recordingDate
 ```
 
-The methods usually have a RecSession object as first argument
+The methods usually have a RecSession object as first argument.
 ``` {R RecSession_calling_method}
 recordingDate(rs)
 getIsClustered(rs)

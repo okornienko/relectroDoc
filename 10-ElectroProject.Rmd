@@ -4,7 +4,7 @@ So far, the objects presented (e.g. RecSession, SpikeTrain, CellGroup, Positrack
 However, projects usually contains several recording sessions.
 The ElectroProject class represents you projects.
 It contains a list of the RecSession objects that makes up your project.
-The main purpose of the ElectroProject is to allow you to 1) run analysis of all your recording session and 2) merge the results from multiple recording sessions.
+The main purpose of the ElectroProject is to allow you to 1) run analysis of all your recording sessions and 2) merge the results from multiple recording sessions.
 
 ## Create an ElectroProject object
 
@@ -33,7 +33,7 @@ load(file=paste(ep@directory,"ep",sep="/"))
 This way, you create the ep object once and then comment the code out. 
 The next session you only run the `load()` function.
 
-## ElectroProject Methods
+## Methods
 List the methods of the ElectroProject class
 ```{R EPMethods}
 methods(class=ElectroProject)
