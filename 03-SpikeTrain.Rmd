@@ -38,7 +38,7 @@ print(paste("Sampling rate of st", st@samplingRate, "Hz"))
 print(paste("Number of cells in st:",st@nCells))
 ```
 
-## SpikeTrain Methods
+## Methods
 List the methods of the SpikeTrain class
 ```{R methods_SpikeTrain}
 methods(class=SpikeTrain)

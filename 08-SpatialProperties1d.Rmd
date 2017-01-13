@@ -22,7 +22,7 @@ pt<-myList$pt
 sp1<-myList$sp1
 ```
 
-## SpatialProperties1d Methods
+## Methods
 List the methods of the DatFiles class
 ```{R 1dMethods}
 methods(class=SpatialProperties1d)

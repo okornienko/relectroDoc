@@ -33,7 +33,7 @@ myList<-getRecSessionObjects(rs)
 df<-myList$df
 ```
 
-## DatFiles Methods
+## Methods
 List the methods of the DatFiles class
 ```{R dfdMethods,eval=F}
 methods(class=DatFiles)

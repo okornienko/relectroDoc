@@ -44,7 +44,7 @@ sp<-myList$sp
 
 This makes the code more compact.
 
-## SpatialProperties2d Methods
+## Methods
 List the methods of the SpatialProperties2d class
 ```{R SpatialProperties2dMethods}
 methods(class=SpatialProperties2d)

@@ -22,7 +22,7 @@ st<-myList$st
 hd<-myList$hd
 ```
 
-## HeadDirection Methods
+## Methods
 List the methods of the HeadDirection class
 ```{R hddMethods}
 methods(class=HeadDirection)

@@ -1,0 +1,77 @@
+# Deploy the relectro_doc book on an apache2 server
+
+This document shows you how to deploy the book on a local apache2 server.
+
+## Install Apache, MySQL, PHP
+
+Choose a computer to host the book.
+Log in this computer and install the 3 components.
+It is assumed that you are using a recent ubuntu computer.
+
+```{r, engine = 'bash', eval = FALSE}
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install lamp-server^ phpmyadmin
+```
+
+Mind the ^ at the end.
+
+## Test Apache server
+Test that the Apache server works by opening a browser and go to the ip address of the computer you choose.
+You should get a page with the message `It works!`.
+
+## Test that php works
+
+Create a file `/var/www/html/test.php` with this content.
+```{r, engine= 'bash', eval = FALSE}
+<? php_info(); ?>
+```
+The apache server should have the permission to read the file.
+You should see a page describing your php engine.
+
+## Allow mysql connection from php
+
+Edit the file `/etc/php/7.0/apache2/php.ini`
+Uncomment `extension=php_mysqli.dll`
+
+## Create a directory for sensitive information
+
+```{r, engine='bash',eval=FALSE}
+sudo mkdir /var/www/html/includes
+sudo chgrp data /var/www/html/includes
+sudo chmod g+wrx /var/www/html/includes
+```
+
+## Create an empty mysql database
+
+Replace `xxxx` and `yyyyyy` by your passwords.
+
+```{r, engine='bash',eval=FALSE}
+mysql -u root  -p
+CREATE DATABASE dbtest;
+grant all privileges on *.* to 'kevin'@'localhost' identified by 'xxxx'; 
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES ON dbtest.* TO 'webuser'@'localhost' IDENTIFIED BY 'yyyyyy';
+quit;
+```
+
+## Create a table in the mysql database
+```{r, engine='bash',eval=FALSE}
+ mysql -u kevin -p dbtest
+CREATE TABLE IF NOT EXISTS `users` (
+  `userId` int(11) NOT NULL AUTO_INCREMENT,
+  `userName` varchar(30) NOT NULL,
+  `userEmail` varchar(60) NOT NULL,
+  `userPass` varchar(255) NOT NULL,
+  PRIMARY KEY (`userId`),
+  UNIQUE KEY `userEmail` (`userEmail`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+```
+
+## Ideally we would need a php-mysql registering system but can't get it to work.
+
+At the moment, I clone the repo on the server.
+Run bookdown::render_book("index.Rmd")
+sudo mv _book/* /var/www/html
+
+This is very simple but there is no registration.
+
