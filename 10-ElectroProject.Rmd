@@ -173,7 +173,7 @@ The file names are the names of the elements in the list returned by the functio
 Here is how to load these files.
 
 ```{R epLoad1}
-load(paste(ep@directory,"results","cells",sep="/"))
+load(paste(ep@resultsDirectory,"cells",sep="/"))
 print(paste("Number of cells:",length(cells$mean.rate)))
 print(cells$mean.rate)
 ```
@@ -210,4 +210,6 @@ rm(cl,workers)
 
 In this case all the threads were on the same computer.
 You can use different computers by adding their ip addresses in the `workers` vector.
-All computers needs to run the save version of R and needs to have `relectro` installed.
+All computers needs to run the same version of R and `relectro`.
+You mainly gain time when analysis requires heavy CPU usage.
+For example, if you calculate instantaneous firing rate.
