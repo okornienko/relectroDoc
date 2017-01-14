@@ -1,0 +1,42 @@
+# Cluster quality
+
+We have now cover the classes that you can used in *relectro*.
+The next chapters covers analysis and tasks that are commonly done.
+In this chapter, the isolation quality of your cluster is discussed.
+
+Tetrode recording has some limitations. A significant one is that the quality of the spike clusters that we identify can vary. Here are the principal problems that we are facing.
+
+* The amplitude of spikes recorded from a neuron can be close to the threshold and some of the spikes are not detected.
+* The waveforms of the spikes of one neuron are very similar to the noise recorded.
+* The waveforms recorded from two neurons are very similar.
+* The waveforms from a neurons might not be stable for the entire recording period.
+
+The implications of the limitations listed above can be minimized by ensuring that only well-isolated clusters are kept in your database.
+There are at least 3 factors that you need to consider to evaluate the quality of your clusters.
+
+1. If a cluster contains noise or spikes from more than one neuron, the refractory period of the clusters is often not empty (i.e. there are interspike intervals smaller than approximately 2 ms).
+This can be quantified from the spike-time autocorrelation.
+
+2. If the spike of one neuron are present in two clusters, then the spike-time crosscorrelation between the two clusters will have a trough near time 0 that ressemble the refractory period of the spike-time autocorrelation.
+
+3. A well-isolated cluster should be far away from other clusters in the waveform feature space. The is quantified with the isolation distance. It is defined as the minimal Mahalanobis distance from the center of a cluster at which there are as many spikes from other clusters as spikes from the cluster of interest. 
+
+There is a function called `clusterIsolationCheck` in the *relectro* package that can give you a score for each of these 3 factors. It will generate a data.frame called `cluster.check` that contains variables to assess cluster quality.
+
+We can't apply the function in our database because the files containing the features of the spikes are not present. You can however adapt the code to you own database by changing the first line.
+
+```{R clusterQuality1, eval=FALSE}
+ep<-new("ElectroProject",directory="~/Downloads/data_relectro_doc/linear_track")
+ep<-setSessionList(ep)
+rss<-getSessionList(ep,clustered=T)
+runOnSessionList(ep,
+                 sessionList=head(rss,n=5),
+                 fnct=clusterIsolationCheck,
+                 save=T)
+load(paste(ep@resultsDirectory,cluster.check,sep="/"))
+```
+
+There is now a cluster.check object from which you can assess the quality of your clusters.
+The clusters for which `cluster.check$check==TRUE` should be examined.
+
+Clusters that are not well isolated should be deleted. Quality is more important than quantity because your assumption when doing analysis is that a cluster represent all and only the spikes of one neuron.
