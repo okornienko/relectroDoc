@@ -39,4 +39,10 @@ load(paste(ep@resultsDirectory,cluster.check,sep="/"))
 There is now a cluster.check object from which you can assess the quality of your clusters.
 The clusters for which `cluster.check$check==TRUE` should be examined.
 
-Clusters that are not well isolated should be deleted. Quality is more important than quantity because your assumption when doing analysis is that a cluster represent all and only the spikes of one neuron.
+```{R clusterQuality2, eval=FALSE}
+cluster.check[,which(cluster.check$check==TRUE)]
+# or for example
+cluster.check[,which(cluster.check$refractoryRatio>0.1)]
+```
+
+Clusters that are not well isolated should be deleted. Quality is more important than quantity because your assumption when doing analysis is that clusters represent all and only the spikes of one neuron.
