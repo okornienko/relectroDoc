@@ -75,7 +75,7 @@ The next chapters cover these objects and show you how to manipulate them.
 All functions and classes in *relectro* have their own documentation. 
 You can assess it with by preceding the name of the class by `?`
 For example, you can get infomration on the RecSession class this way.
-```{R help}
+```{R help,eval=FALSE}
 ?RecSession
 ```
 If you are using RStudio, you should see the documentation of the object in the bottom right panel called `Help`.

@@ -106,7 +106,7 @@ Thus, the relationship between the spike and the position of the animals is chan
 After all calculations, we get a distribution of statistics when the position of the spike is random.
 This can be used to get a significance threshold. 
 
-```{R sp2dShuffle}
+```{R sp2dShuffle,cache=TRUE}
 sp@nShufflings<-100 # would normally be at least 500
 sp<-getMapStatsShuffle(sp,st.lt,pt)
 hist(sp@infoScoreShuffle,xlim=c(0,1)) # show the distribution
@@ -141,5 +141,6 @@ In the case of spatially selective neurons, this means to look at the path of th
 pt2<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,env="sqr70"))
 sop<-spikeOnPath(sp,st.lt,pt2)
 spikeOnPathPlot(sop,clu=8)
+rm(session,datadir,rs,pt,st,sp,pt2,sop,statThreshold)
 ```
 

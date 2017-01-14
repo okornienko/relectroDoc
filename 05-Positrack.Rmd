@@ -68,6 +68,7 @@ plot(pt2@x,pt2@y,xlim=c(0,90),ylim=c(0,90),type='l')
 
 pt3<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,env="rest"))
 plot(pt3@x,pt3@y,xlim=c(0,90),ylim=c(0,90),type='l')
+rm(rs,pt,st,m,pt1,pt2,pt3)
 ```
 
 Notice that there are two rest boxes. This is because the experimenter did not place the rest box exactly at the same location during the different trials. Best practice is to *always* place an environment at the same location! 
