@@ -1,0 +1,91 @@
+# Recording session summary figure
+
+This page shows you how to get a summary figure for the neurons you recorded during a single recording session.
+It might be interesting to get this output just after you clustered your recording session to know what cell types you have at the tip of your tetrodes.
+
+
+We start with a recording session.
+```{R summaryFig}
+library(relectro)
+## assign the name of the session to a variable called session
+session="jp4311-09032016-0107"
+## assign the session directory to a variable called datadir
+datadir="~/Downloads/data_relectro_doc/linear_track/jp4311/jp4311-09032016-0107/"
+## create a RecSession object
+rs<-new("RecSession",session=session,path=datadir)
+rs<-loadRecSession(rs)
+
+myList<-getRecSessionObjects(rs)
+st<-myList$st
+pt<-myList$pt
+cg<-myList$cg
+sp<-myList$sp
+hd<-myList$hd
+```
+
+Now we decide on what we want to display.
+Let say we want two spike-time autocorrelations, spikeOnPlot, firing rate map, spatial autocorrelation and head-direction polar plot for each neuron.
+```{R summaryFig2}
+ptsqr70<-setInvalidOutsideInterval(pt,s=getIntervalsEnvironment(rs,env="sqr70")[,1],
+                                   e=getIntervalsEnvironment(rs,env="sqr70")[,2])
+
+# no interval set in st, so analysis based on all recording session
+st<-spikeTimeAutocorrelation(st,binSizeMs = 1,windowSizeMs = 30,probability = FALSE)
+st1<-spikeTimeAutocorrelation(st,binSizeMs = 2,windowSizeMs = 400,probability = FALSE)
+# ptsqr70 is limited to sqr70, so analysis limited to this
+sop<-spikeOnPath(sp,st,ptsqr70)
+#
+sp<-firingRateMap2d(sp,st,ptsqr70)
+sp<-mapSpatialAutocorrelation(sp)
+#
+hd<-headDirectionHisto(hd,st,ptsqr70)
+```
+
+## Split screen
+We have all the data needed, now we just need to make the plots.
+Since we have several plots on the same figure, we use `split.screen()` to do this. 
+We will first do the analysis for one neuron to start with a simple example.
+We will split the graphic device into 6 screens for our figures.
+
+```{R summaryFig3}
+# prepare a matrix that indicates how to split the screen, the values range from 0 to 1
+# each line of 4 numbers is minX, maxX, minY, maxY
+m<-matrix(c(c(0.00,0.33,0.50,1.00),
+        c(0.33,0.66,0.50,1.00),
+        c(0.66,1.00,0.50,1.00),
+        c(0.00,0.33,0.00,0.50),
+        c(0.33,0.66,0.00,0.50),
+        c(0.66,1.00,0.00,0.50)),ncol = 4,byrow = TRUE)
+print(m)
+## split our screen 
+split.screen(m)
+
+## select a cluster
+selCluster<-2
+
+## select the first screen
+screen(1)
+## plot
+plot(st@autoTimePoints,st@auto[,which(st@cellList==selCluster)],type='l',
+   ylab="Spike counts",xlab="Time (ms)")
+## move to next screen and plot
+screen(2)
+plot(st1@autoTimePoints,st1@auto[,which(st@cellList==selCluster)],type='l',
+   ylab="Spike counts",xlab="Time (ms)")
+screen(3)
+spikeOnPathPlot(sop,clu=selCluster)
+screen(4)
+firingRateMapPlot(sp@maps[,,which(sp@cellList==selCluster)])
+screen(5)
+firingRateMapAutoPlot(sp@autos[,,which(sp@cellList==selCluster)])
+screen(6)
+headDirectionPolarPlot(hd@histo[,which(hd@cellList==selCluster)])
+## close the screens and close the devise
+close.screen(all = TRUE)
+# If you want to see the figure, wait before running dev.off()
+dev.off()
+```
+
+Notice that this figure is not very nice. 
+This is because it is not symmetrical and different font size are used.
+

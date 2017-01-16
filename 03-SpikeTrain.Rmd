@@ -32,8 +32,11 @@ print(st)
 ```
 
 As with other objects, you can get a list of the attributes of your SpikeTrain object with `?SpikeTrain` and you can access them with `@`
-```{R SpikeTrain_attributes}
+
+```{R SpikeTrain_help, eval=FALSE}
 ?SpikeTrain
+```
+```{R SpikeTrain_attributes}
 print(paste("Sampling rate of st", st@samplingRate, "Hz"))
 print(paste("Number of cells in st:",st@nCells))
 ```
@@ -127,7 +130,6 @@ st.l1<-setIntervals(st,
 print(st.l1) ## check the number of intervals and interval time
 st.l1<-meanFiringRate(st.l1)
 print(st.l1@meanFiringRate)
-rm(df,st.l1) # delete objects that we don't need anymore.
 ```
 
 
@@ -235,7 +237,7 @@ Finally, the firing probability is transformed into a firing rate.
 
 A second common use of the instantaneous firing rate is to look at firing associations between pairs of neurons. We will calculate these correlation here.
 
-```{R ifr}
+```{R ifr,cache =TRUE}
 ## calculate the ifr
 st<-ifr(st,windowSizeMs = 100, spikeBinMs = 1,kernelSdMs = 100)
 ## ifr is stored as a matrix
@@ -248,6 +250,7 @@ plot(st@ifrTime[1:1000],st@ifr[5,1:1000],type='l',
 lines(st@ifrTime[1:1000],st@ifr[1,1:1000],col="red")
 ## get the ifr associations between pairs of neurons
 ifrAssociation(st)
+rm(session,datadir,rs,st,st2,st3,st4,fileName,df,st.l1) # delete objects
 ```
 
 There is a correlation coefficient for each cell pair.

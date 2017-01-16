@@ -195,7 +195,7 @@ All you need to do is to create a cluster of threads, and then call `runOnSessio
 
 ```{R epPara}
 library(snow)
-workers<-c(rep("localhost",6))
+workers<-c(rep("localhost",5))
 cl<-makeCluster(workers, type = "SOCK",outfile="")
 print(paste("Using",length(workers), "threads"))
 ## load the relectro package on each thread

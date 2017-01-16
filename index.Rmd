@@ -41,3 +41,6 @@ From a terminal, uncompress the document with
 
 Alternatively, right click on the compressed file, and click on `extract here`.
 This creates a directory called `data_relectro_doc` containing the data.
+
+## Documentation repository
+If you would like to see the source code of this document, it is available on [github](https://github.com/kevin-allen/relectroDoc). 

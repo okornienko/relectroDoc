@@ -22,6 +22,11 @@ Instead of reading all these files while programing, you just get the informatio
 
 ## Create a RecSession object
 
+
+```{R methods,  echo = FALSE} 
+library(methods)# this block is there so that we can use new()
+```
+
 Let's create a RecSession object to represent our recording session.
 
 ```{r RecSession}
@@ -66,7 +71,7 @@ Here is how to get a list of all the attributes of an object in R.
 ```{R eval=FALSE}
 attributes(rs)
 ## or
-?RecSession
+RecSession
 ```
 Now that you have a list of the attributes, here is how you can access them.
 ```{R access_attributes}
@@ -81,7 +86,7 @@ methods(class=RecSession)
 ```
 As indicated in the output, see `?methods` for acessing help.
 For example
-```{R RecSession_help}
+```{R RecSession_help, eval=FALSE}
 ?recordingDate
 ```
 
@@ -133,4 +138,5 @@ Tip: Have a look at the `trialStartRes` and `trialEndRes` attributes, or use `ge
 What is the recording date of this recording session?
 ```{R RecSessionExercise4,echo=F}
 print(recordingDate(rs))
+rm(session,datadir,rs,i)
 ```
