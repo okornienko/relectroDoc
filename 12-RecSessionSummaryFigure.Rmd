@@ -41,6 +41,7 @@ sp<-mapSpatialAutocorrelation(sp)
 hd<-headDirectionHisto(hd,st,ptsqr70)
 ```
 
+## Split screen
 We have all the data needed, now we just need to make the plots.
 Since we have several plots on the same figure, we use `split.screen()` to do this. 
 We will first do the analysis for one neuron to start with a simple example.
