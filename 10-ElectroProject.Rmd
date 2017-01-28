@@ -21,7 +21,9 @@ ep<-setSessionList(ep)
 print(ep)
 ```
 
-If it takes time to set the session list, you can save the ElectroProject as a file and load it when you start a new R session.
+Running `setSessionList()` might take a long time because it has to list all subdirectories of within the project directories. 
+You might want to avoid running this each time you start a new R session. 
+You can do this by saving your `ep` object to the disk and loading it as it was saved. 
 
 ```{R epSave}
 # save to a file called ep
@@ -32,6 +34,16 @@ load(file=paste(ep@directory,"ep",sep="/"))
 
 This way, you create the ep object once and then comment the code out. 
 The next session you only run the `load()` function.
+
+## Problem with parameter files of recording sessions
+
+One possible problem when using `setSessionList()` on a new database is that there are many directories that have faulty parameter files.
+This might cause the function `setSessionList()` to return with an error message after a long waiting time.
+If you find yourself in this situation, you might want to try to call `ep<-setSessionList(ep,loadSessions = F)`.
+This will get the name and path of recording session without loading them.
+Then run `ep<-loadSessionsInList(ep)`.
+With this function, the waiting time is shorter before getting the error messages.
+You can solve the problems with the faulty parameter files quickly.
 
 ## Methods
 List the methods of the ElectroProject class
