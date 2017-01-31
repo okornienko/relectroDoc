@@ -132,7 +132,28 @@ st.l1<-meanFiringRate(st.l1)
 print(st.l1@meanFiringRate)
 ```
 
+### Time intervals with a given environment
 
+Another common situation is that you want to perform analysis only when the animal was in a given environment.
+You can get the intervals for trials in an environment using `getIntervalsEnvironment`, which is a method of the RecSession class.
+
+```{R SpikeTrainIntervalEnv}
+# get the intervals for trials on the circ environment
+int<-getIntervalsEnvironment(rs,environment = "circ")
+# intervals are saved in a matrix
+int
+# set the intervals in the SpikeTrain object from data in the matrix
+st<-setIntervals(st,s=int[,1],e=int[,2])
+## print the intervals set in the SpikeTrain object
+print(paste(st@startInterval,st@endInterval))
+## here is a shortcut to do the same, this works only if the intervals are in a matrix
+st<-setIntervals(st,s=int)
+## print the intervals set in the SpikeTrain object
+print(paste(st@startInterval,st@endInterval))
+## You could set the interval to the first trial in the circ environment
+st<-setIntervals(st,s=int[1,1],e=int[1,2])
+print(paste(st@startInterval,st@endInterval))
+```
 
 ## Limit analysis to specific cells
 
