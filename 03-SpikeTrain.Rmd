@@ -190,6 +190,20 @@ plot(st@autoTimePoints,st@auto[,1],type='l',
      ylab="Spike counts",xlab="Time (ms)")
 ```
 
+### Plot of spike-time autocorrelations
+
+There is also a function in `relectro` to plot spike-time autocorrelation. You can get the line plot by default as follows.
+
+```{R spikeTimeAutocorrelationPlot2}
+spikeTimeAutocorrelationPlot(x=st@autoTimePoints,y=st@auto[,1])
+```
+
+You can also have vertical lines instead.
+
+```{R spikeTimeAutocorrelationPlot3}
+spikeTimeAutocorrelationPlot(x=st@autoTimePoints,y=st@auto[,1],type='h')
+```
+
 ## Spike-time crosscorrelation between cells
 
 You can calculate spike-time crosscorrelations in a similar way. In this case, the spikes of one neuron are used as reference spikes for a second neuron.
