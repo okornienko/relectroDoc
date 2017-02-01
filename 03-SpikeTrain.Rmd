@@ -256,6 +256,11 @@ plot(st@crossTimePoints,st@cross[,6],type='l',
      main=paste("Pair:",st@cellPairList[6,1],st@cellPairList[6,2]))
 ```
 
+Since the format of the data containing the crosscorrelation is the same as that of autocorrelation, you can also use the function that plots spike-time autocorrelation to plot spike-time crosscorrelation.
+
+```{R spikeTimeCrosscorrelation3.5}
+spikeTimeAutocorrelationPlot(x=st@crossTimePoints,y=st@cross[,6],type='h',name=paste("Pair:",st@cellPairList[6,1],st@cellPairList[6,2]))
+```
 
 ## Spike-time crosscorrelation to events
 
