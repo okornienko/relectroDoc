@@ -223,5 +223,4 @@ rm(cl,workers)
 In this case all the threads were on the same computer.
 You can use different computers by adding their ip addresses in the `workers` vector.
 All computers needs to run the same version of R and `relectro`.
-You mainly gain time when analysis requires heavy CPU usage.
-For example, if you calculate instantaneous firing rate.
+You mainly gain time when analysis requires heavy CPU usage (e.g. if you calculate instantaneous firing rate).
