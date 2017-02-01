@@ -113,7 +113,7 @@ hist(sp@infoScoreShuffle,xlim=c(0,1)) # show the distribution
 statThreshold<-quantile(sp@infoScoreShuffle,probs = 0.95) # get threshold
 print(paste("The 0.95 quantile is",statThreshold))
 print("cells with significant infromation score:")
-print(st@cellList[sp@infoScore>statThreshold])
+print(st.lt@cellList[sp@infoScore>statThreshold])
 ```
 
 The function takes a few seconds as it needs to calculate `r length(sp@infoScore)*sp@nShufflings` firing rate maps and spatial autocorrelations.

@@ -225,6 +225,13 @@ You can also have vertical lines instead.
 spikeTimeAutocorrelationPlot(x=st@autoTimePoints,y=st@auto[,1],type='h')
 ```
 
+
+Or you can plot several spike-time autocorrelations with ``
+
+```{R spikeTimeAutocorrelationPlot4}
+spikeTimeAutocorrelationsPlot(autos = st@auto, names = st@cellList, timePoints = st@autoTimePoints)
+```
+
 ## Spike-time crosscorrelation between cells
 
 You can calculate spike-time crosscorrelations in a similar way. In this case, the spikes of one neuron are used as reference spikes for a second neuron.
