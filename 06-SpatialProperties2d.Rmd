@@ -56,7 +56,8 @@ We will not cover all methods. If you are curious, remember that you can get the
 
 Firing rate maps are used to visualize the firing rate of a neuron in a 2D environment. Making the firing rate maps is relatively easy. You set the time interval in the SpikeTrain object to limit the analysis to some time period and then make the maps. 
 ```{R sp2d_maps}
-st.lt<-setIntervals(st,getIntervalsEnvironment(rs,environment = "sqr70"))
+st.lt<-setIntervals(st,
+                    getIntervalsEnvironment(rs,environment = "sqr70"))
 sp<-firingRateMap2d(sp,st.lt,pt)
 print(sp)
 ```
@@ -72,8 +73,9 @@ There are two functions in *relectro* to do this: `firingRateMapPlot()` and `fir
 ```{R, sp2d_maps1, fig.width=2.5, fig.height=2.5}
 firingRateMapPlot(sp@maps[,,1])
 ```
-```{R sp2d_maps2, fig.width=6,fig.height = 8}
-firingRateMapsPlot(sp@maps,names=st@cellList)
+```{R sp2d_maps2, fig.width=6,fig.height = 5}
+firingRateMapsPlot(sp@maps,names=st@cellList,
+                   ncol = 4,nrow = 3)
 ```
 
 ## Map statistics

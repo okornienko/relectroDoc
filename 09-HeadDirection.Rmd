@@ -30,8 +30,10 @@ methods(class=HeadDirection)
 
 ## HeadDirection rate histogram
 ```{R hdHisto}
-## set intervals in the SpikeTrain object to limit the analysis to trials in the sqr70
-st<-setIntervals(st,s=getIntervalsEnvironment(rs,env="sqr70"))
+## set intervals in the SpikeTrain object 
+## to limit the analysis to trials in the sqr70
+st<-setIntervals(st,
+                 s=getIntervalsEnvironment(rs,env="sqr70"))
 hd<-headDirectionHisto(hd,st,pt)
 ```
 
@@ -40,8 +42,9 @@ hd<-headDirectionHisto(hd,st,pt)
 headDirectionPolarPlot(hd@histo[,3])
 ```
 
-```{R hdHistoPlot1,fig.width=6,fig.height = 8}
-headDirectionPolarPlots(hd@histo,names=st@cellList)
+```{R hdHistoPlot1,fig.width=6,fig.height = 4}
+headDirectionPolarPlots(hd@histo,names=st@cellList,
+                        ncol = 5, nrow = 3)
 ```
 
 ## Head direction Stats
