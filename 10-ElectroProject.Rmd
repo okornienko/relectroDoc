@@ -67,6 +67,14 @@ print(rs)
 
 Every RecSession object in the list contains all the parameters of this recording session.
 
+## Visualize your RecSession list
+
+Before starting the analysis on a group of recording sessions, it is a good practice to first ensure that the recording protocol used in each recording session is what you expect. Use the `RecSessionListTrialPlot` function.
+
+```{R epSessionListPlot}
+RecSessionListTrialPlot(rss)
+```
+
 ## Analysis of several recording sessions
 
 There are two steps involved in running code on several recording sessions.
