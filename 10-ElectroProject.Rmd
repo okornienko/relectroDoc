@@ -2,15 +2,19 @@
 
 So far, the objects presented (e.g. RecSession, SpikeTrain, CellGroup, Positrack, etc.) operate on a single recording session.
 However, projects usually contains several recording sessions.
-The ElectroProject class represents you projects.
+The ElectroProject class represents you project.
 It contains a list of the RecSession objects that makes up your project.
 The main purpose of the ElectroProject is to allow you to 1) run analysis of all your recording sessions and 2) merge the results from multiple recording sessions.
 
 ## Create an ElectroProject object
 
-You can create an `ElectroProject` object with the `new()` function. 
-Then you create the list of RecSession with `setSessionList()`. 
-The print method give you a summary of the recording sessions.
+You can create an `ElectroProject` object with the `new()` function.
+You need to specify a directory for your project.
+This is a directory containing a folder for each of your animal.
+Within the folders for the animals, you have folders for individual recording sessions.
+
+After creating the ElectroProject object, you can create the list of RecSession objects with `setSessionList()`. 
+The print method of the ElectroProject class gives you a summary of the recording sessions.
 This is a good way to keep track of whether all recording sessions have been clustered.
 
 ```{r EP_create}
@@ -32,7 +36,7 @@ save(ep,file=paste(ep@directory,"ep",sep="/"))
 load(file=paste(ep@directory,"ep",sep="/"))
 ```
 
-This way, you create the ep object once and then comment the code out. 
+This way, you create and save the ep object only once, then you comment this part of the code out. 
 The next session you only run the `load()` function.
 
 ## Problem with parameter files of recording sessions
@@ -67,17 +71,19 @@ print(rs)
 
 Every RecSession object in the list contains all the parameters of this recording session.
 
-## Visualize your RecSession list
+### Visualize your RecSession list
 
-Before starting the analysis on a group of recording sessions, it is a good practice to first ensure that the recording protocol used in each recording session is what you expect. Use the `RecSessionListTrialPlot` function.
+Before starting the analysis on a group of recording sessions, you should first ensure that the recording protocol used in each recording session is what you expect. Use the `RecSessionListTrialPlot` function.
 
 ```{R epSessionListPlot}
 RecSessionListTrialPlot(rss)
 ```
 
+In this case you can see that the recording sessions contain between `r min(sapply(rss,function(rs){sum(rs@env=='lt')}))` and `r max(sapply(rss,function(rs){sum(rs@env=='lt')}))` trials with the linear track (lt).
+
 ## Analysis of several recording sessions
 
-There are two steps involved in running code on several recording sessions.
+There are two steps in the process of running code on several recording sessions.
 First, you write a function that will be applied to all recording sessions.
 Second, you apply this function to all your sessions.
 
@@ -133,7 +139,7 @@ You can also return much more data.
 For example, you can analyze several spatial properties of neurons and return their firing rate maps.
 In this case, we return an array and a data.frame.
 
-```{R epFunction5}
+```{R epFunction5, cache=TRUE}
 spatialScores<-function(rs){
  ## load the data in R
   myList<-getRecSessionObjects(rs)
@@ -175,10 +181,18 @@ print(res$cells)
 
 ### Run on sessions
 
-To get this data for all the recording sessions in our session list, you call `runOnSessions()`.
-This will apply a function to all recording sessions.
+In R, there is a function that is called `lapply`. 
+This function apply a function of your choice to each item of a list.
+For example, the code below create a list with the session name of all recording sessions.
+```{R epLapply}
+myFunction<-function(rs){rs@session}
+myList<-lapply(rss,myFunction)
+myList[[1]]
+```
+
+You could use `lapply` to run your analysis on your recording session but I recommand using `runOnSessions` instead. This method internally uses `lapply` but merges the results of the recording sessions together.
 Below we will apply it to the first 5 sessions, as a test.
-```{R epRun1}
+```{R epRun1, cache = TRUE}
 runOnSessionList(ep,
                  sessionList=head(rss,n=5),
                  fnct=spatialScores,
@@ -213,7 +227,7 @@ You can use the `snow` package to do this.
 If it is not install on your computer, try `install.packages("snow")`
 All you need to do is to create a cluster of threads, and then call `runOnSessions()` with the right arguments.
 
-```{R epPara}
+```{R epPara, cache = TRUE}
 library(snow)
 workers<-c(rep("localhost",5))
 cl<-makeCluster(workers, type = "SOCK",outfile="")
@@ -231,4 +245,4 @@ rm(cl,workers)
 In this case all the threads were on the same computer.
 You can use different computers by adding their ip addresses in the `workers` vector.
 All computers needs to run the same version of R and `relectro`.
-You mainly gain time when analysis requires heavy CPU usage (e.g. if you calculate instantaneous firing rate).
+You mainly gain time when analysis requires heavy CPU usage (e.g. if you calculate instantaneous firing rate or do some shuffling analysis).
