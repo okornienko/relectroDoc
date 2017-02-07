@@ -117,7 +117,8 @@ For example, in the circular_arena database, there is a file with the extension 
 # get the file name from the RecSession object
 fileName<-paste(rs@fileBase,"light_trials_intervals",sep=".")
 df<-read.table(fileName,header=F) # read into a data.frame
-colnames(df)<-c("trialNo", "condition","start","end") # set the column name to simplify the code below
+# set the column name to simplify the code below
+colnames(df)<-c("trialNo", "condition","start","end") 
 head(df)
 ```
 
@@ -211,12 +212,37 @@ plot(st@autoTimePoints,st@auto[,1],type='l',
      ylab="Spike counts",xlab="Time (ms)")
 ```
 
+### Plot of spike-time autocorrelations
+
+There is also a function in `relectro` to plot spike-time autocorrelation. You can get the line plot by default as follows.
+
+```{R spikeTimeAutocorrelationPlot2}
+spikeTimeAutocorrelationPlot(x=st@autoTimePoints,y=st@auto[,1])
+```
+
+You can also have vertical lines instead.
+
+```{R spikeTimeAutocorrelationPlot3}
+spikeTimeAutocorrelationPlot(x=st@autoTimePoints,y=st@auto[,1],type='h')
+```
+
+
+Or you can plot several spike-time autocorrelations with ``
+
+```{R spikeTimeAutocorrelationPlot4}
+spikeTimeAutocorrelationsPlot(autos = st@auto, 
+                              names = st@cellList, 
+                              timePoints = st@autoTimePoints, 
+                              ncol = 3,nrow = 2)
+```
+
 ## Spike-time crosscorrelation between cells
 
 You can calculate spike-time crosscorrelations in a similar way. In this case, the spikes of one neuron are used as reference spikes for a second neuron.
 
 ```{R spikeTimeCrosscorrelation}
-st<-spikeTimeCrosscorrelation(st,binSizeMs=1,windowSizeMs = 5,probability = T)
+st<-spikeTimeCrosscorrelation(st,binSizeMs=1,
+                              windowSizeMs = 5,probability = T)
 st@cross
 ```
 
@@ -235,6 +261,12 @@ plot(st@crossTimePoints,st@cross[,6],type='l',
      main=paste("Pair:",st@cellPairList[6,1],st@cellPairList[6,2]))
 ```
 
+Since the format of the data containing the crosscorrelation is the same as that of autocorrelation, you can also use the function that plots spike-time autocorrelation to plot spike-time crosscorrelation.
+
+```{R spikeTimeCrosscorrelation3.5}
+spikeTimeAutocorrelationPlot(x=st@crossTimePoints,y=st@cross[,6],
+                             type='h',name=paste("Pair:",st@cellPairList[6,1],st@cellPairList[6,2]))
+```
 
 ## Spike-time crosscorrelation to events
 

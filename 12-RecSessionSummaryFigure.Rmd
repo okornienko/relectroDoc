@@ -66,12 +66,10 @@ selCluster<-2
 ## select the first screen
 screen(1)
 ## plot
-plot(st@autoTimePoints,st@auto[,which(st@cellList==selCluster)],type='l',
-   ylab="Spike counts",xlab="Time (ms)")
+spikeTimeAutocorrelationPlot(x=st@autoTimePoints,y=st@auto[,which(st@cellList==selCluster)],type='l')
 ## move to next screen and plot
 screen(2)
-plot(st1@autoTimePoints,st1@auto[,which(st@cellList==selCluster)],type='l',
-   ylab="Spike counts",xlab="Time (ms)")
+spikeTimeAutocorrelationPlot(x=st1@autoTimePoints,y=st1@auto[,which(st@cellList==selCluster)],type='h')
 screen(3)
 spikeOnPathPlot(sop,clu=selCluster)
 screen(4)
@@ -87,5 +85,5 @@ dev.off()
 ```
 
 Notice that this figure is not very nice. 
-This is because it is not symmetrical and different font size are used.
+The size of the figures could be adjusted to make it more symmetrical.
 
