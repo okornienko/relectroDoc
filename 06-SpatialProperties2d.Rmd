@@ -10,7 +10,7 @@ You can also get the spatial autocorrelation of the maps.
 SpatialProperties2d objects are used together with RecSession, SpikeTrain and Positrack objects.
 We create these 4 objects.
 
-```{r sp2d_create}
+```{r sp2d_create, cache =TRUE}
 library(relectro)
 ## assign the name of the session to a variable called session
 session="jp4298-18022016-0106"

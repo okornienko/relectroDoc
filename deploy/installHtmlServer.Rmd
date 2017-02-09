@@ -48,18 +48,15 @@ sudo apt-get install pandoc
 pandoc --version
 ```
 
-## Clone relectroDoc on server
+## Clone relectro and relectroDoc on server
 ```{r, engine= 'bash', eval =FALSE}
 cd /home/kevin/repo/
 git clone https://github.com/kevin-allen/relectroDoc.git
+git clone https://github.com/kevin-allen/relectro.git
 ```
 
 ## Use crontab on the server to deploy
 
-There is a shell script in the `/home/kevin/repo/relectroDoc/deploy` directory to deploy locally.
-Its name is `deploy`.
-It pulls from github, renders the book and copies the files in the `/var/www/html` directory.
-Install it in the crontab of user kevin
-At the moment there is an error.
-I run `bookdown::render_book("index.Rmd",new_session = FALSE,output_dir = "/var/www/html/")` in Rstudio and it works.
+There is a shell script to deploy the relectroDoc html documentation: `/home/kevin/repo/relectroDoc/deploy/deploy_relectroDoc.sh`.
+Install it in the crontab of user kevin (see comment in the shell script itself)
 

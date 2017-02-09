@@ -125,7 +125,7 @@ You can also return much more data.
 For example, you can analyze several spatial properties of neurons and return their firing rate maps.
 In this case, we return an array and a data.frame.
 
-```{R epFunction5}
+```{R epFunction5, cache =TRUE}
 spatialScores<-function(rs){
  ## load the data in R
   myList<-getRecSessionObjects(rs)
@@ -170,7 +170,7 @@ print(res$cells)
 To get this data for all the recording sessions in our session list, you call `runOnSessions()`.
 This will apply a function to all recording sessions.
 Below we will apply it to the first 5 sessions, as a test.
-```{R epRun1}
+```{R epRun1, cache =TRUE}
 runOnSessionList(ep,
                  sessionList=head(rss,n=5),
                  fnct=spatialScores,
@@ -205,7 +205,7 @@ You can use the `snow` package to do this.
 If it is not install on your computer, try `install.packages("snow")`
 All you need to do is to create a cluster of threads, and then call `runOnSessions()` with the right arguments.
 
-```{R epPara}
+```{R epPara, cache =TRUE}
 library(snow)
 workers<-c(rep("localhost",5))
 cl<-makeCluster(workers, type = "SOCK",outfile="")

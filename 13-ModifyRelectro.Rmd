@@ -1,0 +1,102 @@
+# Modify relectro
+
+relectro is far from being a very polished package. It might be that you have to modify it.
+There are several reasons why you may want to make modifications to relectro:
+
+1. Fix a bug
+2. Add a new function
+3. Add modify and existing function
+4. Improve the documentation
+5. Improve its running speed
+
+Here we provide a step-by-step procedure to modify relectro on your computer and to get your changes in the main repository. This assumes that you are using RStudio but you don't have to.
+
+## Fork relectro
+
+If you want to make change to relectro, the best way is to fork the relectro git repository. 
+The fork just create a copy of the relectro package in your github personal account. 
+
+Then use `git clone yourForkRepoURL` to get a copy of the repo on your computer.
+You are then free to experiment with your own code.
+
+You can find some explanation of the fork process on [github](https://help.github.com/articles/fork-a-repo/).
+
+## Install the devtools R package
+
+Open RStudio and get the package
+```{r, eval=FALSE}
+install.packages("devtools")
+```
+
+## Load relectro as a project in RStudio
+
+In RStudio go to `File -> Open Project`. Locate the file `relectro.Rproj`.
+
+The RStudio environment will facilitate the way you can change relection, build and reload relectro and test your modification
+
+## Make the changes
+
+Modifying relectro usually involves a few cycles of this procedure:
+
+1. Make modifications to the code
+2. Build and reload (Build -> Build and Reload)
+3. Test the code you wrote with some examples
+
+
+## Update the documentation
+
+If you make modifications to a function or add a function in relectro, you also need to update the documentation.
+You have to use the roxygen2 package to do this.
+```{r, eval=FALSE}
+install.packages("roxygen2")
+```
+
+Add or modify the roxygen comments to your source file. You can find information on how to do this with the [roxygen vignette](https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html).
+
+Create the Rd files for the documentation by running
+```{r, eval=FALSE}
+devtools::document()
+```
+
+
+## Add tests for your new function
+
+If you add a function to the relectro package, you are strongly encouraged to test your function with formal tests.
+To do so you will need the testthat package
+
+```{r, eval=FALSE}
+install.packages("testthat")
+```
+
+You can find more information about writing tests [here](http://r-pkgs.had.co.nz/tests.html).
+All the tests are in the `tests/testthat` folder of the relectro repository. 
+
+
+## Check that you haven't broken relectro
+
+There is a series of checks that you can run to pick up frequent mistakes. 
+```{r, eval=FALSE}
+devtools::check(document = FALSE)
+```
+You can also run the same tests in RStudio with `Build -> Check Package`
+This should exit without warnings or errors.
+
+
+## Commit your changes to the forked repository (your fork)
+
+Once you are happy with the modifications you made. Commit the changes using git.
+Below is one way to do this.
+
+```{r, engine = 'bash', eval = FALSE}
+cd /home/kevin/repo/relectro
+git commit -a -m "message explaining the modification done"
+```
+
+
+## Create a pull request
+
+If you want to have your changes incorporated into the main relectro package, you just need to create a pull request on the main relectro repository.
+You can get more information [here](https://help.github.com/articles/about-pull-requests/).
+
+Once your changes are approved, they will be available to all users.
+

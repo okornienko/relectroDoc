@@ -1,5 +1,5 @@
 --- 
-title: "Documentation for relectro"
+title: "relectroDoc"
 author: "Kevin Allen"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -15,7 +15,7 @@ This document shows you how to use the R package **relectro** to analyze data fr
 The documentation contains examples that you can run on your own (linux) computer.
 
 ## R
-You need to install R on your computer.
+To be able to run the code presented in this document, you need to install R on your computer.
 With a computer running Ubuntu, run this in the terminal
 
 `sudo apt-get -y install r-base r-base-dev`
