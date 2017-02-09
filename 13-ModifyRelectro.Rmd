@@ -1,25 +1,26 @@
 # Modify relectro
 
-relectro is far from being a very polished package. It might be that you have to modify it.
+relectro is far from being a complete and optimized package; you might have to modify it.
 There are several reasons why you may want to make modifications to relectro:
 
 1. Fix a bug
 2. Add a new function
 3. Add modify and existing function
 4. Improve the documentation
-5. Improve its running speed
+5. Improve speed
 
 Here we provide a step-by-step procedure to modify relectro on your computer and to get your changes in the main repository. This assumes that you are using RStudio but you don't have to.
 
 ## Fork relectro
 
 If you want to make change to relectro, the best way is to fork the relectro git repository. 
-The fork just create a copy of the relectro package in your github personal account. 
+The fork just create a copy of the relectro package in your github personal account.
+You can fork relectro from your web browser by visiting the relectro [repo](https://github.com/kevin-allen/relectro).
 
 Then use `git clone yourForkRepoURL` to get a copy of the repo on your computer.
 You are then free to experiment with your own code.
 
-You can find some explanation of the fork process on [github](https://help.github.com/articles/fork-a-repo/).
+You can find some explanations of the fork process on [github](https://help.github.com/articles/fork-a-repo/).
 
 ## Install the devtools R package
 
