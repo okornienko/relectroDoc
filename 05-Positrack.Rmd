@@ -8,6 +8,11 @@ The values are in cm.
 The head direction data are in `hd`.
 The values varies from 0 to 360.
 
+The position data likely come from a tracking system (e.g. positrack) in which the y-axis has its origin
+at the top-left of the screen. In contrast, most plotting functions in R have the y-axis origin at the bottom-left
+of the screen. This is important to know if you want to find out where landmarks relative to the animal.
+
+
 ## Create Positrack object 
 
 ```{r ptCreate}
