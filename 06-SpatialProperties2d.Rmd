@@ -67,6 +67,18 @@ By default, the bins in the map are 2x2 cm or 4 cm$^2$. The standard deviation o
 
 The data of the firing rate maps are stored in the `maps` attributes and the occupancy map in in the attribute `occupancy`.
 
+## Speed filter
+
+It is common to remove periods of near immobility from the firing rate maps. You can do this with the `speedFilter` method of the Postrackt object.
+```{R sp2d_maps}
+st.lt<-setIntervals(st,
+                    getIntervalsEnvironment(rs,environment = "sqr70"))
+pt.sf<-speedFilter(pt,minSpeed = 3,maxSpeed = 100)
+sp<-firingRateMap2d(sp,st.lt,pt.sf)
+```
+
+
+
 ## Plot firing rate maps
 
 The maps are saved in an array called `maps`. You probably want to have a look at the map now.

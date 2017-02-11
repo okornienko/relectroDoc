@@ -53,6 +53,14 @@ st<-meanFiringRate(st)
 print(st@meanFiringRate)
 ```
 
+## Speed filter
+
+You can also set the spatial data in the Positract object to invalid values using the speedFilter method.
+This might be useful when making spatial firing rate maps (see next chapter on SpatialProperties2d).
+```{R PositrackSpeedFilter}
+pt1<-speedFilter(pt,minSpeed=3,maxSpeed=200)
+```
+
 
 ## Plot the animal path
 
