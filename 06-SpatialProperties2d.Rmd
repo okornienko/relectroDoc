@@ -28,6 +28,7 @@ st<-loadSpikeTrain(st) # load res clu and sampling rate
 sp<-new("SpatialProperties2d")
 ```
 
+## Get all RecSession objects
 When doing analysis, it is often the case that you need to use several *relectro* objects.
 To simplify the process, you can call a single function that returns a list with all *relectro* objects associated with a recording session.
 
