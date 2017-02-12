@@ -66,10 +66,12 @@ selCluster<-2
 ## select the first screen
 screen(1)
 ## plot
-spikeTimeAutocorrelationPlot(x=st@autoTimePoints,y=st@auto[,which(st@cellList==selCluster)],type='l')
+spikeTimeAutocorrelationPlot(x=st@autoTimePoints,
+                             y=st@auto[,which(st@cellList==selCluster)],type='l')
 ## move to next screen and plot
 screen(2)
-spikeTimeAutocorrelationPlot(x=st1@autoTimePoints,y=st1@auto[,which(st@cellList==selCluster)],type='h')
+spikeTimeAutocorrelationPlot(x=st1@autoTimePoints,
+                             y=st1@auto[,which(st@cellList==selCluster)],type='h')
 screen(3)
 spikeOnPathPlot(sop,clu=selCluster)
 screen(4)
@@ -84,6 +86,95 @@ close.screen(all = TRUE)
 dev.off()
 ```
 
-Notice that this figure is not very nice. 
-The size of the figures could be adjusted to make it more symmetrical.
+## Summary figure of a recording session
 
+Let say you just completed clustering the spikes of one recording session and want to generate 
+a summary figure for all cells recorded during this recording session.
+A flexible way is to create a function to generate this figure for a single recording session.
+Here is an example of function.
+
+```{R summaryFig4, eval=FALSE}
+## function to generate a pdf file with the recorded neurons of one recording session
+## we want to display 2 spike-time autocorrelation and 2 maps for each neuron
+## one neuron per row
+recSessionSummaryPlot<-function(rs){
+  myList<-getRecSessionObjects(rs)
+  pt<-myList$pt
+  st<-myList$st
+  sp<-myList$sp
+  cg<-myList$cg
+  if(sum(rs@env=="sqr70")<1)
+    stop("need at least 1 trial in the sqr70 open field")
+  if(sum(rs@env=="rest")<1)
+    stop("need at least 1 trial in the rest box")
+
+  ## make 2 spike-time autocorrelations
+  st0<-spikeTimeAutocorrelation(st,binSizeMs = 1,
+                                windowSizeMs = 20,probability = F)
+  st1<-spikeTimeAutocorrelation(st,binSizeMs = 5,
+                                windowSizeMs = 400,probability = F)
+
+  ## get spikeTrain objects with intervals set to 2 different trials
+  st.s1<-setIntervals(st,
+                      s=getIntervalsEnvironment(rs,environment="sqr70")[1,1],
+                      e=getIntervalsEnvironment(rs,environment="sqr70")[1,2])
+  st.r<-setIntervals(st,
+                     s=getIntervalsEnvironment(rs,environment="rest")[1,1],
+                     e=getIntervalsEnvironment(rs,environment="rest")[1,2])
+
+  ## get a speed filter to exclude immobility periods (possible swr)
+  pt<-speedFilter(pt,minSpeed=3,maxSpeed=200)
+
+  ## make 2 firing rate maps, different trials
+  sp.s1<-firingRateMap2d(sp,st.s1,pt)
+  sp.r<-firingRateMap2d(sp,st.r,pt)
+
+  #########################################
+  ### make summary figure with the data ###
+  #########################################
+  fileName=paste(rs@fileBase,".summary.pdf",sep="")
+  print(paste("saving summary figure in",fileName))
+  pdf(file = fileName ,paper = "a4", height = 10,width = 7.5) # open the file as device
+  ## just need to make the figure now
+  ncol=4
+  nrow=8
+  plot.per.page=ncol*nrow
+  m<-matrix(c(rep(seq(0,1-(1/ncol),1/ncol),nrow),
+              rep(seq(1/ncol,1,1/ncol),nrow),
+              rep(seq(1-(1/nrow),0,0-1/nrow),each=ncol),
+              rep(seq(1,1/nrow,0-1/nrow),each=ncol)),ncol=4)
+  index=1
+  nCells<-dim(sp.s1@maps)[3]
+  for (i in 1:nCells){
+    if(index==1)
+    {
+      split.screen(m)
+    }
+    screen(index)
+    spikeTimeAutocorrelationPlot(x=st0@autoTimePoints,
+                                 y=st0@auto[,i],type='l',
+                                 name = paste(rs@session,st@cellList[i]))
+    screen(index+1)
+    spikeTimeAutocorrelationPlot(x=st1@autoTimePoints,
+                                 y=st1@auto[,i],type='l',
+                                 name= paste("tet:",cg@tetrode[i],"clu:",cg@cluToTetrode[i]))
+    screen(index+2)
+    firingRateMapPlot(sp.s1@maps[,,i],name=sp.s1@cellList[i],outma = c(0,3,0.5,3))
+    screen(index+3)
+    firingRateMapPlot(sp.r@maps[,,i],name=sp.r@cellList[i],outma = c(0,3,0.5,3))
+    
+    index=index+4 # next plot
+    if((index-1)==plot.per.page)
+    {
+      close.screen( all.screens = TRUE )
+      index=1
+    }
+  }
+  close.screen(all.screens = TRUE)
+  dev.off() # close the file as device
+}
+
+```
+
+When called, the function generates a pdf file with information regarding the recorded cells.
+You can modify the function to show the most relevent data for your project.
