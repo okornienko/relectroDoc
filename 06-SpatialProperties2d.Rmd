@@ -10,7 +10,7 @@ You can also get the spatial autocorrelation of the maps.
 SpatialProperties2d objects are used together with RecSession, SpikeTrain and Positrack objects.
 We create these 4 objects.
 
-```{r sp2d_create, cache =TRUE}
+```{r sp2d_create}
 library(relectro)
 ## assign the name of the session to a variable called session
 session="jp4298-18022016-0106"
@@ -70,9 +70,7 @@ The data of the firing rate maps are stored in the `maps` attributes and the occ
 ## Speed filter
 
 It is common to remove periods of near immobility from the firing rate maps. You can do this with the `speedFilter` method of the Postrackt object.
-```{R sp2d_maps}
-st.lt<-setIntervals(st,
-                    getIntervalsEnvironment(rs,environment = "sqr70"))
+```{R sp2d_maps_speed}
 pt.sf<-speedFilter(pt,minSpeed = 3,maxSpeed = 100)
 sp<-firingRateMap2d(sp,st.lt,pt.sf)
 ```
