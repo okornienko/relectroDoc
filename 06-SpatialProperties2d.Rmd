@@ -70,7 +70,7 @@ The data of the firing rate maps are stored in the `maps` attributes and the occ
 ## Speed filter
 
 It is common to remove periods of near immobility from the firing rate maps. You can do this with the `speedFilter` method of the Postrackt object.
-```{R sp2d_maps}
+```{R sp2d_mapsSpeed}
 st.lt<-setIntervals(st,
                     getIntervalsEnvironment(rs,environment = "sqr70"))
 pt.sf<-speedFilter(pt,minSpeed = 3,maxSpeed = 100)
