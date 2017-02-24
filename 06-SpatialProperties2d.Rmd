@@ -57,9 +57,9 @@ We will not cover all methods. If you are curious, remember that you can get the
 
 Firing rate maps are used to visualize the firing rate of a neuron in a 2D environment. Making the firing rate maps is relatively easy. You set the time interval in the SpikeTrain object to limit the analysis to some time period and then make the maps. 
 ```{R sp2d_maps}
-st.lt<-setIntervals(st,
+st.sqr70<-setIntervals(st,
                     getIntervalsEnvironment(rs,environment = "sqr70"))
-sp<-firingRateMap2d(sp,st.lt,pt)
+sp<-firingRateMap2d(sp,st.sqr70,pt)
 print(sp)
 ```
 
@@ -72,10 +72,8 @@ The data of the firing rate maps are stored in the `maps` attributes and the occ
 It is common to remove periods of near immobility from the firing rate maps. You can do this with the `speedFilter` method of the Postrackt object.
 ```{R sp2d_maps_speed}
 pt.sf<-speedFilter(pt,minSpeed = 3,maxSpeed = 100)
-sp<-firingRateMap2d(sp,st.lt,pt.sf)
+sp<-firingRateMap2d(sp,st.sqr70,pt.sf)
 ```
-
-
 
 ## Plot firing rate maps
 
@@ -94,7 +92,7 @@ firingRateMapsPlot(sp@maps,names=st@cellList,
 There are several variables that describe the firing patterns in the firing rate maps: 
 
 ```{R sp2d_stats,results="hide"}
-sp<-getMapStats(sp,st.lt,pt)
+sp<-getMapStats(sp,st.sqr70,pt.sf)
 ## if you are curious to see the function code, use getMethod()
 getMethod("getMapStats","SpatialProperties2d")
 ```
@@ -121,12 +119,12 @@ This can be used to get a significance threshold.
 
 ```{R sp2dShuffle,cache=TRUE}
 sp@nShufflings<-100 # would normally be at least 500
-sp<-getMapStatsShuffle(sp,st.lt,pt)
+sp<-getMapStatsShuffle(sp,st.sqr70,pt.sf)
 hist(sp@infoScoreShuffle,xlim=c(0,1)) # show the distribution
 statThreshold<-quantile(sp@infoScoreShuffle,probs = 0.95) # get threshold
 print(paste("The 0.95 quantile is",statThreshold))
 print("cells with significant infromation score:")
-print(st.lt@cellList[sp@infoScore>statThreshold])
+print(st.sqr70@cellList[sp@infoScore>statThreshold])
 ```
 
 The function takes a few seconds as it needs to calculate `r length(sp@infoScore)*sp@nShufflings` firing rate maps and spatial autocorrelations.
@@ -138,7 +136,7 @@ To highlight the 60 degree regularity in the map, we usually use spatial autocor
 You need to calculate the firing rate maps and then get the spatial autocorrelations
 
 ```{R sp2d_autocorrelation}
-sp<-firingRateMap2d(sp,st.lt,pt)
+sp<-firingRateMap2d(sp,st.sqr70,pt.sf)
 sp<-mapSpatialAutocorrelation(sp)
 firingRateMapAutoPlot(sp@autos[,,which(st@cellList==8)])
 ```
@@ -152,8 +150,8 @@ In the case of spatially selective neurons, this means to look at the path of th
 
 ```{R sp2d_spikesOnPath}
 pt2<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,env="sqr70"))
-sop<-spikeOnPath(sp,st.lt,pt2)
+sop<-spikeOnPath(sp,st.sqr70,pt2)
 spikeOnPathPlot(sop,clu=8)
-rm(session,datadir,rs,pt,st,sp,pt2,sop,statThreshold)
+rm(session,datadir,rs,pt,st,st.sqr70,sp,pt2,sop,statThreshold)
 ```
 
