@@ -1,7 +1,7 @@
 # ElectroProject
 
 So far, the objects presented (e.g. RecSession, SpikeTrain, CellGroup, Positrack, etc.) operate on a single recording session.
-However, projects usually contains several recording sessions.
+However, projects usually contain several recording sessions.
 The ElectroProject class represents you project.
 It contains a list of the RecSession objects that makes up your project.
 The main purpose of the ElectroProject is to allow you to 1) run analysis of all your recording sessions and 2) merge the results from multiple recording sessions.
