@@ -129,6 +129,27 @@ print(st.sqr70@cellList[sp@infoScore>statThreshold])
 
 The function takes a few seconds as it needs to calculate `r length(sp@infoScore)*sp@nShufflings` firing rate maps and spatial autocorrelations.
 
+## Map stability
+
+Map stability is just a correlation coeficient between the friring rate values of 2 firing rate maps.
+You get this score by creating firing rate maps in two separate SpatialProperties2d objects. 
+Then you call the method `firingRateMapCorrelation(sp1,sp2)` to get the map stability scores.
+Here is an example that would work for a project in which the recording sessions have at least 2 trials in the `sqr70` environment.
+```{R sp2d_stability,cache=TRUE,eval=FALSE}
+  ## Set intervals at first sqr70
+  st1<-setIntervals(st,s=getIntervalsEnvironment(rs,environment = "sqr70")[1,1],e=getIntervalsEnvironment(rs,environment = "sqr70")[1,2])
+  ## Set intervals at second sqr70
+  st2<-setIntervals(st,s=getIntervalsEnvironment(rs,environment = "sqr70")[2,1],e=getIntervalsEnvironment(rs,environment = "sqr70")[2,2])
+  ## Prepare the positrack object
+  pt<-speedFilter(pt,minSpeed = 3,maxSpeed = 100)
+  ## Get 2 SpatialProperties2d objects with maps of the first and second trials
+  ## Make sure that the maps are construct with the same Positrack object
+  sp1<-firingRateMap2d(sp,st1,pt)
+  sp2<-firingRateMap2d(sp,st2,pt)
+  ## Get the map stability
+  mapCorr<-firingRateMapCorrelation(sp1,sp2)
+```
+
 ## Spatial autocorrelations
 
 You probably noticed that the neuron with the cluster id `8` looks like a grid cell.
