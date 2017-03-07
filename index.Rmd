@@ -10,27 +10,24 @@ description: "This is the documentation for the R package relectro."
 
 # Prerequisites
 
-This document shows you how to use the R package **relectro** to analyze data from tetrode recording experiments.
+This document shows you how to use the **relectro** R package to analyze data from tetrode recording experiments.
 
-The documentation contains examples that you can run on your own (linux) computer.
+To facilitate learning, you are invited to download a read database in order to try out the code segments on your own computer and experiment with the code.
 
 ## R
-To be able to run the code presented in this document, you need to install R on your computer.
+To run the code presented in this document, you need to install R on your computer.
 With a computer running Ubuntu, run this in the terminal
 
 `sudo apt-get -y install r-base r-base-dev`
 
 ## Rstudio
-You should download the latest version of Rstudio to run the examples. You can obtain it [here](https://www.rstudio.com/products/rstudio/download3/).
+Although not required, you might want to install the latest version of Rstudio to run the examples. You can obtain it [here](https://www.rstudio.com/products/rstudio/download3/).
 
+## Relectro
+You need to install the relectro package. The instructions can be found on the [online repository](https://github.com/kevin-allen/relectro). You have to scroll down to see the instructions to install it on your computer.
 
-## relectro
-You need to install the relectro package. The instructions can be found on the [online repository](https://github.com/kevin-allen/relectro). You might have to scroll down to see the instructions to install it on your computer.
-
-## databases
+## Databases
 To make the process as realistic as possible, two real databases are used in the examples. 
-
-You will need 9 Gb of free space on your device to use them.
 
 You can download the data from my [Google drive](https://drive.google.com/open?id=0B54KF3oUGY18ODQ1bVc1MkpicG8).
 The download button is usually in the top right corner.
@@ -41,6 +38,8 @@ From a terminal, uncompress the document with
 
 Alternatively, right click on the compressed file, and click on `extract here`.
 This creates a directory called `data_relectro_doc` containing the data.
+
+You will need 9 Gb of free space on your device to use them.
 
 ## Documentation repository
 If you would like to see the source code of this document, it is available on [github](https://github.com/kevin-allen/relectroDoc). 

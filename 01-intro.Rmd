@@ -1,18 +1,18 @@
 # Introduction {#intro}
 
-The main purpose of this document is to show you how to analyze data from electrophysiological experiments using the *relectro* R package. The document describes the main functionalities of *relectro*. 
+The main purpose of this document is to show you how to analyze data from electrophysiological experiments using the *relectro* R package. The document describes the main functionalities of *relectro*.
 
 ## Why R and *relectro*
 
 There are several different environments to do analysis of electropysiological data (python, matlab, R, etc.).
-I decided to use R because it is distributed under GNU general public license. 
+I decided to use R because it is relatively easy to learn and it is distributed under GNU general public license.
 This means that it will always be available and that we don't depend on a company to give us the permission to use it.
 In the context of scientific work, this means that anyone can replicate your analysis without having to buy software.
 
 R also has other advantages. 
-It has excellent support for statistical analysis and it generates nice figures.
+It has excellent support for statistical analysis and it generates nice figures (not all agree).
 
-It's main disadvantages are that it is slow when compared to c programs, and some calculations are not easily done with the R language. 
+It's main disadvantages are that it is slow when compared to c programs, and some calculations are not easily done with the R language.
 
 This is where the *relectro* package kicks in. It provides a high-level interface for the analysis of electrophysiological data in R.
 Under the hood, key calculations are implemented in c.

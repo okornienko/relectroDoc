@@ -18,7 +18,7 @@ If you want to know what information these files contain, have a look at the fil
 
 
 One role of the RecSession object in *relectro* is to read several of these files to gather the properties of the recording session.
-Instead of reading all these files while programing, you just get the information directly from the RecSession object.
+Instead of reading all these files while programing, you just need to create and load the RecSession object and get on with your work without having to directly interact with the files.
 
 ## Create a RecSession object
 
@@ -60,7 +60,7 @@ print(rs)
 You can now read that the sampling rate during this session was `r rs@samplingRate` Hz and that the lenght of the session was `r rs@sessionDurationSec` sec.
 
 One side effect of calling the function `loadRecSession` is that it will check the validity of several configuration files that are create at recording time.
-If there are inconsistencies between configuration files, an error message appears and indicates what the problem is.
+If there are inconsistencies between configuration files, an error message appears and indicates what the problem is. You will need to fix these inconsistencies with your favorite text editor.
 
 ## Attributes of RecSession objects
 
@@ -135,7 +135,7 @@ print(paste(rs@trialNames[i],":",rs@trialStartRes[i],rs@trialEndRes[i]))
 ```
 Tip: Have a look at the `trialStartRes` and `trialEndRes` attributes, or use `getIntervalsEnvironment()`. 
 
-What is the recording date of this recording session?
+What is the recording date of this recording session? Tip: Use a method of the RecSession class.
 ```{R RecSessionExercise4,echo=F}
 print(recordingDate(rs))
 rm(session,datadir,rs,i)
