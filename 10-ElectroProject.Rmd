@@ -76,7 +76,7 @@ Every RecSession object in the list contains all the parameters of this recordin
 Before starting the analysis on a group of recording sessions, you should first ensure that the recording protocol used in each recording session is what you expect. Use the `RecSessionListTrialPlot` function.
 
 ```{R epSessionListPlot}
-RecSessionListTrialPlot(rss)
+recSessionListTrialPlot(rss)
 ```
 
 In this case you can see that the recording sessions contain between `r min(sapply(rss,function(rs){sum(rs@env=='lt')}))` and `r max(sapply(rss,function(rs){sum(rs@env=='lt')}))` trials with the linear track (lt).
