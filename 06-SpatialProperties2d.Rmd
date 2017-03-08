@@ -166,12 +166,11 @@ There is also the function `firingRateMapAutosPlot()` to plot all spatial autoco
 
 ## Spikes on path
 
-It is often beneficial to look at raw data to better appreciate the quality of the data. 
-In the case of spatially selective neurons, this means to look at the path of the animal together with the spikes.
+It is a good idea to inspect the raw position data to identify potential problems. 
+In the case of spatially selective neurons, this means to look at the path of the animal together with the spikes. Use the function `spikeOnPath` to get the path and spike positions. Only data that fall withing the intervals set in the SpikeTrain object will be used. `spikeOnPathPlot` generate the plot for a single neuron.
 
 ```{R sp2d_spikesOnPath}
-pt2<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,env="sqr70"))
-sop<-spikeOnPath(sp,st.sqr70,pt2)
+sop<-spikeOnPath(sp,st.sqr70,pt)
 spikeOnPathPlot(sop,clu=8)
 rm(session,datadir,rs,pt,st,st.sqr70,sp,pt2,sop,statThreshold)
 ```
