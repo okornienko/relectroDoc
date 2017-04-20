@@ -135,7 +135,7 @@ print(st.sqr70@cellList[sp@infoScore>statThreshold])
 The function takes a few seconds as it needs to calculate `r length(sp@infoScore)*sp@nShufflings` firing rate maps and spatial autocorrelations.
 
 
-## Modulation of firing rate by running speed
+## Speed score
 
 There has been a recent interest in the relationship between running speed and the firing rate of neurons.
 You can test for such relationship as shown below.
@@ -147,7 +147,7 @@ sp<-speedScore(sp,st1,pt,minSpeed=3,maxSpeed=100,runLm=T) # get speed scores usi
 print(sp@speedScore)
 ```
 
-You can also plot the firing rate of a cell as a function of running speed
+You can also plot the firing rate of a cell as a function of running speed.
 
 ```{R speedTuningCurve}
 srl<-speedRateTuningCurve(sp,st1,pt,minSpeed=3,maxSpeed=100)
