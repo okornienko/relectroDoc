@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # SpatialProperties2d
 
 This chapter documents the use of the SpatialProperties2d class of the relectro package. 
@@ -129,6 +134,27 @@ print(st.sqr70@cellList[sp@infoScore>statThreshold])
 
 The function takes a few seconds as it needs to calculate `r length(sp@infoScore)*sp@nShufflings` firing rate maps and spatial autocorrelations.
 
+
+## Modulation of firing rate by running speed
+
+There has been a recent interest in the relationship between running speed and the firing rate of neurons.
+You can test for such relationship as shown below.
+
+```{R speedCode, cache=TRUE}
+st<-ifr(st) ## get the ifr for the entire recording session
+st1<-setIntervals(st,s=getIntervalsEnvironment(rs,environment = "sqr70")[1,1],e=getIntervalsEnvironment(rs,environment = "sqr70")[1,2]) # set some intervals
+sp<-speedScore(sp,st1,pt,minSpeed=3,maxSpeed=100,runLm=T) # get speed scores using ifr within intervals
+print(sp@speedScore)
+```
+
+You can also plot the firing rate of a cell as a function of running speed
+
+```{R speedTuningCurve}
+srl<-speedRateTuningCurve(sp,st1,pt,minSpeed=3,maxSpeed=100)
+print(head(srl))
+plot(srl$mid[which(srl$clu==7)],srl$rate[which(srl$clu==7)],type='l',xlab="Running speed (cm/sec)",ylab="Firing rate (Hz)")
+```
+
 ## Map stability
 
 Map stability is just a correlation coeficient between the friring rate values of 2 firing rate maps.
@@ -174,4 +200,3 @@ sop<-spikeOnPath(sp,st.sqr70,pt)
 spikeOnPathPlot(sop,clu=8)
 rm(session,datadir,rs,pt,st,st.sqr70,sp,pt2,sop,statThreshold)
 ```
-
