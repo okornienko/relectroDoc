@@ -198,5 +198,17 @@ In the case of spatially selective neurons, this means to look at the path of th
 ```{R sp2d_spikesOnPath}
 sop<-spikeOnPath(sp,st.sqr70,pt)
 spikeOnPathPlot(sop,clu=8)
+
+```
+
+## Spatial crosscorrelation
+
+If you want to know the relationship between the firing fields in two separate firing rate maps, calculate the spatial crosscorrelation of the maps.
+This is used to see the phase difference between two grid cells.
+```{R sp2d_spatial_crosscorrelation}
+st.sqr70<-setCellList(st.sqr70,c(8,10))
+sp<-firingRateMap2d(sp,st.sqr70,pt.sf)
+sp<-mapSpatialCrosscorrelation(sp)
+firingRateMapCrossPlot(sp@ccMaps[,,1])
 rm(session,datadir,rs,pt,st,st.sqr70,sp,pt2,sop,statThreshold)
 ```

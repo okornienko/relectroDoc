@@ -308,6 +308,18 @@ rm(session,datadir,rs,st,st2,st3,st4,fileName,df,st.l1) # delete objects
 
 There is a correlation coefficient for each cell pair.
 
+## Power spectrum of instantaneous firing rate
+
+If you want to see the power at different frequencies in the instantaneous firing rate, you can generate power spectrum.
+
+```{R ifr_power,cache =TRUE}
+st<-ifr(st,windowSizeMs = 2, spikeBinMs = 1,kernelSdMs = 5)
+powerSpectrum<-ifrPowerSpectrum(st)
+plot(powerSpectrum$freq,powerSpectrum$ps[,1],type='l',ylab="Power",xlab="Frequency (Hz)",xlim=c(0,100))
+
+```
+
+
 ## Simulated spike trains
 
 The SpikeTrain object can be used with simulated spike trains or to analyze trains of events that are not necessarily spikes!
@@ -363,8 +375,8 @@ st<-loadSpikeTrain(st) # load res clu and sampling rate
 Print the mean firing rate of all the neurons of the recording session for all trials during which the animal was on the linear track.
 
 ```{R SpikeTrainExercise2,echo=FALSE}
-st<-setIntervals(st,s=rs@trialStartRes[which(rs@env=="lt")],
-             e=rs@trialEndRes[which(rs@env=="lt")])
+st<-setIntervals(st,s=rs@trialStartRes[which(rs@environment=="lt")],
+             e=rs@trialEndRes[which(rs@environment=="lt")])
 st<-meanFiringRate(st)
 print(st@meanFiringRate)
 ```
@@ -376,12 +388,12 @@ Plot the results to compare the two spike-time autocorrelation.
 
 ```{R SpikeTrainExercise3,echo=F}
 st<-setCellList(st,cellList = 2)
-st<-setIntervals(st,s=rs@trialStartRes[which(rs@env=="lt")],
-             e=rs@trialEndRes[which(rs@env=="lt")])
+st<-setIntervals(st,s=rs@trialStartRes[which(rs@environment=="lt")],
+             e=rs@trialEndRes[which(rs@environment=="lt")])
 st<-spikeTimeAutocorrelation(st,binSizeMs = 2,windowSizeMs = 400,probability = T)
 auto.lt<-st@auto
-st<-setIntervals(st,s=rs@trialStartRes[which(rs@env=="rest")],
-             e=rs@trialEndRes[which(rs@env=="rest")])
+st<-setIntervals(st,s=rs@trialStartRes[which(rs@environment=="rest")],
+             e=rs@trialEndRes[which(rs@environment=="rest")])
 st<-spikeTimeAutocorrelation(st,binSizeMs = 2,windowSizeMs = 400,probability = T)
 plot(st@autoTimePoints,st@auto,type='l',
      xlab="Time (ms)",ylab="Spike probability")

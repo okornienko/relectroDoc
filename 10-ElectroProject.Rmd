@@ -31,9 +31,9 @@ You can do this by saving your `ep` object to the disk and loading it as it was 
 
 ```{R epSave}
 # save to a file called ep
-save(ep,file=paste(ep@directory,"ep",sep="/")) 
+save(ep,file=paste(ep@resultsDirectory,"ep",sep="/")) 
 # load the file called ep
-load(file=paste(ep@directory,"ep",sep="/"))
+load(file=paste(ep@resultsDirectory,"ep",sep="/"))
 ```
 
 This way, you create and save the ep object only once, then you comment this part of the code out. 
