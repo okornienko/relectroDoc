@@ -162,10 +162,11 @@ You get this score by creating firing rate maps in two separate SpatialPropertie
 Then you call the method `firingRateMapCorrelation(sp1,sp2)` to get the map stability scores.
 Here is an example that would work for a project in which the recording sessions have at least 2 trials in the `sqr70` environment.
 ```{R sp2d_stability,cache=TRUE,eval=FALSE}
-  ## Set intervals at first sqr70
-  st1<-setIntervals(st,s=getIntervalsEnvironment(rs,environment = "sqr70")[1,1],e=getIntervalsEnvironment(rs,environment = "sqr70")[1,2])
+  ## Set intervals at first lt
+  getIntervalsEnvironment(rs,environment = "lt")
+  st1<-setIntervals(st,s=getIntervalsEnvironment(rs,environment = "lt")[1,1],e=getIntervalsEnvironment(rs,environment = "lt")[1,2])
   ## Set intervals at second sqr70
-  st2<-setIntervals(st,s=getIntervalsEnvironment(rs,environment = "sqr70")[2,1],e=getIntervalsEnvironment(rs,environment = "sqr70")[2,2])
+  st2<-setIntervals(st,s=getIntervalsEnvironment(rs,environment = "lt")[2,1],e=getIntervalsEnvironment(rs,environment = "lt")[2,2])
   ## Prepare the positrack object
   pt<-speedFilter(pt,minSpeed = 3,maxSpeed = 100)
   ## Get 2 SpatialProperties2d objects with maps of the first and second trials
@@ -174,6 +175,7 @@ Here is an example that would work for a project in which the recording sessions
   sp2<-firingRateMap2d(sp,st2,pt)
   ## Get the map stability
   mapCorr<-firingRateMapCorrelation(sp1,sp2)
+  print(mapCorr)
 ```
 
 ## Spatial autocorrelations
@@ -198,7 +200,6 @@ In the case of spatially selective neurons, this means to look at the path of th
 ```{R sp2d_spikesOnPath}
 sop<-spikeOnPath(sp,st.sqr70,pt)
 spikeOnPathPlot(sop,clu=8)
-
 ```
 
 ## Spatial crosscorrelation
@@ -208,7 +209,8 @@ This is used to see the phase difference between two grid cells.
 ```{R sp2d_spatial_crosscorrelation}
 st.sqr70<-setCellList(st.sqr70,c(8,10))
 sp<-firingRateMap2d(sp,st.sqr70,pt.sf)
+sp@minValidBinsCross=20
 sp<-mapSpatialCrosscorrelation(sp)
 firingRateMapCrossPlot(sp@ccMaps[,,1])
-rm(session,datadir,rs,pt,st,st.sqr70,sp,pt2,sop,statThreshold)
+rm(session,datadir,rs,pt,st,st.sqr70,sp,sop,statThreshold)
 ```

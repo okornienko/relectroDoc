@@ -34,7 +34,7 @@ In the example below, the firing rate histograms are made for the 2 running dire
 The results are saved in two different SpatialProperties1d objects
 ```{R 1dMaps}
 ## keep only the data from the linear track and linearize
-ptlt<-setInvalidOutsideInterval(pt,s=getIntervalsEnvironment(rs,env="lt"))
+ptlt<-setInvalidOutsideInterval(pt,s=getIntervalsEnvironment(rs,environment="lt"))
 ptlt<-linearzeLinearTrack(ptlt)
   
 # make maps for running direction 0

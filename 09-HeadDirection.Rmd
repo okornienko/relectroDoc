@@ -33,7 +33,7 @@ methods(class=HeadDirection)
 ## set intervals in the SpikeTrain object 
 ## to limit the analysis to trials in the sqr70
 st<-setIntervals(st,
-                 s=getIntervalsEnvironment(rs,env="sqr70"))
+                 s=getIntervalsEnvironment(rs,environment="sqr70"))
 hd<-headDirectionHisto(hd,st,pt)
 ```
 

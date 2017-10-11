@@ -62,7 +62,7 @@ You can get this from your ElectroProject object with the function `getSessionLi
 You can select recording sessions based on brain areas, recording environments or on whether they were clustered or not.
 
 ```{R epSessionList}
-rss<-getSessionList(ep,clustered=T,region="mec",env="lt")
+rss<-getSessionList(ep,clustered=T,region="mec",environment="lt")
 rss<-sortRecSessionListChronologically(rss)
 print(paste("Number of recording sessions",length(rss)))
 rs<-rss[[11]] ## example of single session to play with
@@ -79,7 +79,7 @@ Before starting the analysis on a group of recording sessions, you should first 
 recSessionListTrialPlot(rss)
 ```
 
-In this case you can see that the recording sessions contain between `r min(sapply(rss,function(rs){sum(rs@env=='lt')}))` and `r max(sapply(rss,function(rs){sum(rs@env=='lt')}))` trials with the linear track (lt).
+In this case you can see that the recording sessions contain between `r min(sapply(rss,function(rs){sum(rs@environment=='lt')}))` and `r max(sapply(rss,function(rs){sum(rs@environment=='lt')}))` trials with the linear track (lt).
 
 ## Analysis of several recording sessions
 
@@ -151,7 +151,7 @@ spatialScores<-function(rs){
   hd<-myList$hd
 
     ## get the position data for sqr70 
-  ptsqr70<-setInvalidOutsideInterval(pt,s=getIntervalsEnvironment(rs,env="sqr70"))
+  ptsqr70<-setInvalidOutsideInterval(pt,s=getIntervalsEnvironment(rs,environment="sqr70"))
   ## only keep data when the animal had a speed between 3 and 100 cm/sec
   ptsqr70<-speedFilter(ptsqr70,minSpeed=3,maxSpeed = 100)
   ## spatial properties during the sqr70 in order to identify the neurons

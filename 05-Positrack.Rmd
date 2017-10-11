@@ -73,13 +73,13 @@ You can see the position data of the positrack object by plotting them.
 We will use the method `getIntervalsEnvironment` of the RecSession class to plot the data of different environment separately.
 
 ```{R PositrackPlot}
-pt1<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,env="lt"))
+pt1<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,environment="lt"))
 plot(pt1@x,pt1@y,xlim=c(0,90),ylim=c(0,90),type='l')
 
-pt2<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,env="sqr70"))
+pt2<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,environment="sqr70"))
 plot(pt2@x,pt2@y,xlim=c(0,90),ylim=c(0,90),type='l')
 
-pt3<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,env="rest"))
+pt3<-setInvalidOutsideInterval(pt,getIntervalsEnvironment(rs,environment="rest"))
 plot(pt3@x,pt3@y,xlim=c(0,90),ylim=c(0,90),type='l')
 rm(rs,pt,st,m,pt1,pt2,pt3)
 ```
