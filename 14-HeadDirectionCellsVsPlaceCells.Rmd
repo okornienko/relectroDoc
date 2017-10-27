@@ -1,0 +1,122 @@
+# Decide if a cell is a dead-direction cell or a place cell
+
+This topic is an important but advanced subject. 
+Let assume we just recorded the activity of a cell as an animal runs on a circular platform.
+You first look at the head-direction tuning curve and it looks like this.
+
+```{r hdOrPlaceCell_01,echo=FALSE}
+  library(relectro)
+  pt<-new("Positrack")
+  sp<-new("SpatialProperties2d")
+  st<-new("SpikeTrain")
+  hd<-new("HeadDirection")
+  
+  degPerBin=10
+  nHdBins=as.integer(ceiling(360/degPerBin))
+  ## 
+  x<-(rep(sin(seq(0,2*pi,0.05)),10)+1)*20
+  y<-(rep(sin(seq(0,2*pi,0.05)+pi/2),10)+1)*20
+  HD<-(rep(sin(seq(0,2*pi,0.05)),10)+1)*180
+  pt@defaultXYSmoothing=0
+  pt<-setPositrack(pt, pxX=x, pxY=y, hd=HD, 
+                   resSamplesPerWhlSample=400,samplingRateDat = 20000,pxPerCm = 1)
+    ## set the spike trains in the object
+  res<-seq(401,400*length(x),by=400*length(x)/10)
+  st<-setSpikeTrain(st=st,res=res,clu=rep(1,length(res)),samplingRate=20000)
+  ## get the hd histo
+  hd@smoothOccupancySd=0
+  hd@smoothRateHistoSd=0
+  hd<-headDirectionHisto(hd,st,pt) # observed histo
+  ## get the firing rate maps
+  sp@smoothOccupancySd=0
+  sp@smoothRateMapSd=0
+  sp<-firingRateMap2d(sp,st,pt)
+
+  plot(x=hd@histoDegree,y=hd@histo,xlab="Head direction",ylab="Rate (Hz)",type='l')
+
+```
+
+This looks very convincing and it seems very likely that this is a head-direction cell.
+The tuning curve has a vector length of 1 and a peak firing rate of 18 Hz, so it can't be more head-direction selective than this.
+This first looks like the perfect head-direction cell.
+However, head-direction cells are often recorded from brain areas that contain neurons that are modulated by the position of the animal. So before concluding that a cell is a head-direction cell, we need to rule out that the position of the animal can explain our head-direction tuning curve.
+To make this point clear, here is the firing rate map of our example cell.
+
+```{r hdOrPlaceCell_02,echo=FALSE}
+firingRateMapPlot(sp@maps[,,1])
+```
+
+In our recording session, the animal ran in circle always in the clockwise direction. 
+This caused the head-direction of the animal to be almost perfectly correlated with the spatial position.
+To put it differently, when the animal was in the location of high firing rate (12 o'clock), the head direction of the animal was always 185 degree. This looks like the perfect place cell.
+
+This is an extrem case, but it highlight the fact that when the cell fire mainly at a location where the head-direction sampling was not homogeneous, then a cell with a sharp head-direction tuning curve might not be a head direction cell. This is especially the case for region of the recording environment where the sampling of head direction is not homogeneous (e.g. along a wall). 
+
+The first step in dealing with this problem is to identify cells with a head-direction selectivity that are an artifact of bias head-direction sampling at locations of high firing. One method was developped by Muller, Bostock, Taube and Kubie (1994, J Neurosci) and adapted to cells with higher background activity by Cacucci, Lever, Wills, Burgess and O'Keefe (2004, J Neurosci). This is called the distributive hypothesis method. The main conept in this method is to calculate a head-direction tuning curve that one would predict under the null hypothesis that the cell is only modulated by location and that any apparent head direction modulation is caused from a sampling bias. The formula is as follows:
+
+\begin{equation} 
+  R_{Pred}(\theta) = \sum(R_P T_P(\theta))/ \sum T_P(\theta),
+\end{equation} 
+
+where $R_P$ is the firing rate in one pixel and $T_P(\theta)$ is the time spent facing head-direction $\theta$ in that pixel. From this formula, you obtained a predicted tuning curve. One then test whether the observe head-direction tuning curve of the cell, $R_{Obs}$, differs from $R_{Pred}$. The comparison is done using this formula:
+
+\begin{equation}
+  DR=\sum | ln((1+R_{Obs}(\theta))/(1+ R_{Pred}(\theta))) | / N,
+\end{equation}
+where $N$ is the number of bins in the head-direction tuning curve. If the spatial selectivity combined with the bias directional sampling can explain the tuning curve of a neuron, then $DR$ approches 0. High values of DR indicate a poor prediction and that the activity of the cell is likely to be modulated by head direction.
+
+
+
+## Implementation in relectro
+
+We wrote a few fonctions to calculate $DR$. Here is an example of how to do this. Note that we don't use any smoothing and make the bins of the firing rate maps slightly bigger when calculating $DR$.
+
+```{R hdOrPlaceCell_03}
+## assign the name of the session to a variable called session
+session="jp4298-18022016-0106"
+datadir="~/Downloads/data_relectro_doc/linear_track/jp4298/jp4298-18022016-0106"
+rs<-new("RecSession",session=session,path=datadir)
+rs<-loadRecSession(rs)
+# get all other relectro objects
+myList<-getRecSessionObjects(rs)
+pt<-myList$pt
+st<-myList$st
+sp<-myList$sp
+hd<-myList$hd
+
+## select an environment 
+st.sqr70<-setIntervals(st,
+                    getIntervalsEnvironment(rs,environment = "sqr70"))
+## only use position data from time when the animal was running
+pt.sf<-speedFilter(pt,minSpeed = 3,maxSpeed = 100)
+
+## set the smoothing to 0 for this analysis
+hd@smoothOccupancySd=0
+hd@smoothRateHistoSd=0
+sp@smoothOccupancySd=0
+sp@smoothRateMapSd=0
+
+## set the size of the spatial bins
+sp@cmPerBin=4
+
+sp<-firingRateMap2d(sp,st.sqr70,pt.sf)
+firingRateMapsPlot(sp@maps,names=st@cellList,
+                   ncol = 4,nrow = 3)
+
+hd<-headDirectionHisto(hd,st.sqr70,pt.sf)
+headDirectionPolarPlots(hd@histo,names=st@cellList,
+                        ncol = 5, nrow = 3)
+
+
+
+DR<-distributiveRatioFromHdHisto(sp,st.sqr70,pt.sf,hd,nRowMap=NA,nColMap=NA,degPerBin=10)
+print(DR)
+```
+
+If you want to see the code, have a look at the code in distributiveRationFromHdHisto().
+Cluster 12 here has a distributive ratio of `r tail(DR,n=1)`, suggesting that its head-direction selectivity can't be explained by the combination of its spatial selectivity and a bias in directional sampling.
+Cluster 12 is likely to be modulated by head direction.
+
+
+
+
