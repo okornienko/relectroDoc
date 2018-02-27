@@ -109,11 +109,11 @@ headDirectionPolarPlots(hd@histo,names=st@cellList,
 
 
 
-DR<-distributiveRatioFromHdHisto(sp,st.sqr70,pt.sf,hd,nRowMap=NA,nColMap=NA,degPerBin=10)
+DR<-directionalDistributiveRatioFromHdHisto(sp,st.sqr70,pt.sf,hd,nRowMap=NA,nColMap=NA)
 print(DR)
 ```
 
-If you want to see the code, have a look at the code in distributiveRationFromHdHisto().
+If you want to see the code, have a look at the code in directionalDistributiveRatioFromHdHisto().
 Cluster 12 here has a distributive ratio of `r tail(DR,n=1)`, suggesting that its head-direction selectivity can't be explained by the combination of its spatial selectivity and a bias in directional sampling.
 Cluster 12 is likely to be modulated by head direction.
 
