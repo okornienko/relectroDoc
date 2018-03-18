@@ -1,0 +1,136 @@
+---
+title: "15-AnimatedPlots"
+output: html_document
+---
+
+# Create animated spike train plots with your data 
+
+To create a movie from sikes on the path of the animal first download the following three R packages: 
+animation (generates R animation), png (inserts a png image into the animation), Ecfun (rotates the png image in the animation).
+
+```{r }
+library(relectro)
+``` 
+```{r animation_001, eval=FALSE}
+library(animation) # create animation
+library(png) # load png image with transparent background
+library(Ecfun) # rotate png
+``` 
+
+Select session and cluster id of the cell to plot:
+
+```{r animation_02}
+session="jp693-10062015-0108"
+datadir="~/Downloads/data_relectro_doc/circular_arena/jp693/jp693-10062015-0108"
+id_clu1=12;
+``` 
+
+Load the recording session and spike train, position and head direction data 
+
+```{r animation_03}
+rs<-new("RecSession",session=session,path=datadir)
+rs<-loadRecSession(rs)
+myList<-getRecSessionObjects(rs)
+pt<-myList$pt
+st<-myList$st
+sp<-myList$sp
+hd<-myList$hd
+ptsqr70<-speedFilter(pt,minSpeed=5,maxSpeed = 100)
+hd<-headDirectionHisto(hd,st,ptsqr70)
+``` 
+
+If the data base above is used, get time intervals where the lights were on
+
+```{r animation_04}
+file=paste(rs@path,"/",rs@session,".light_trials_intervals",sep="")
+lightInt<-read.table(file,header=F)
+lightInt$V2=as.character(lightInt$V2)
+lights=sort(unique(lightInt$V2))
+# reassign trial labels
+lightInt$V2[lightInt$V2 == lights[1]]="d1"
+lightInt$V2[lightInt$V2 == lights[2]]="d2"
+lightInt$V2[lightInt$V2 == lights[3]]="l1"
+lightInt$V2[lightInt$V2 == lights[4]]="l2"
+``` 
+
+Set the time interval for which to plot the spike train. This has to be at least a matrix of one row and two columns containing the beginning and ending of the interval in res-values. Here we choose all trials when light 2 was on. 
+
+```{r animation_05,echo=FALSE}
+int <-as.matrix(lightInt[lightInt$V2=="l2",3:4],1,2)
+st <- setIntervals(st,s=int)
+sp <-getMapStats(sp,st,ptsqr70)
+sop <- spikeOnPath(sp, st, ptsqr70)
+```
+
+Get the position and head direction of the animal during that time
+
+```{r animation_06}
+# spikes: time, xy position
+id=unlist(sapply(1:dim(int)[1],function(x){which(st@clu==id_clu1 & st@res>=int[x,1] & st@res<=int[x,2])}, simplify = TRUE))
+t2=st@res[id]/20000
+x2=sp@xSpikes[id]
+t2=t2[x2!=-1]
+y2=sop$ySpike[sop$cluSpike==id_clu1] 
+x2=sop$xSpike[sop$cluSpike==id_clu1] 
+
+# animal path: time, xy position
+id=unlist(sapply(1:dim(int)[1],function(x){which(ptsqr70@res >= int[x,1] & ptsqr70@res <= int[x,2])}))
+tp2=(ptsqr70@res/20000)[id]
+xp2=ptsqr70@x[id]
+hdp2=ptsqr70@hd[id]
+tp2=tp2[!is.na(xp2)];hdp2=hdp2[!is.na(xp2)]
+yp2=sop$yPath;xp2=sop$xPath
+``` 
+
+Rotate xy spikes and path and the path of the animal so that both fit movement direction of the image
+
+```{r animation_07}
+ang = (180+90)*pi/180
+xy=cbind(xp2,yp2)
+rot = function(x){c(xy[x,1]*cos(ang)-xy[x,2]*sin(ang), 
+                    xy[x,2]*cos(ang)+xy[x,1]*sin(ang))}
+xy=sapply(1:dim(xy)[1],rot)
+xp2=xy[1,];yp2=xy[2,]
+
+xy=cbind(x2,y2)
+rot = function(x){c(xy[x,1]*cos(ang)-xy[x,2]*sin(ang), 
+                    xy[x,2]*cos(ang)+xy[x,1]*sin(ang))}
+xy=sapply(1:dim(xy)[1],rot)
+x2=xy[1,];y2=xy[2,]
+```
+
+Set how fast or slow chunks of the animation should be displayed
+
+```{r animation_09, eval=FALSE}
+
+seq1 = seq(2,299,2) # slow animation: first frames display every second position data
+seq2 = seq(300,20000,200) # fast animation: every 200th frame will be displayed 
+seq3 = rep(40000,50) # display last position data for 50 frames
+
+```
+
+Create the animation.
+
+
+```{r animation_08, eval=FALSE}
+image<- readPNG("/data/projects/pintegration/mouse.png")
+ani.options(interval=.05)
+saveGIF({
+  for (i in c(seq1,seq2,seq3)) { 
+    plot(0,0,type = "n",xlim=c(0,80),ylim=c(-80,0),xlab="",ylab = "", xaxt='n',yaxt='n')
+    points(xp2[1:i],yp2[1:i],cex=.5,pch=20,col="grey")
+    id= t2>=tp2[1] & t2<tp2[i]
+    if(sum(id)!=0 & !is.na(sum(id))){ 
+      points(x2[id],y2[id],cex=.5,pch=20,col="red")
+    }
+    rasterImageAdj(image,xp2[i]-8,yp2[i]-8,xp2[i]+8,yp2[i]+8,bg="transparent",angle = hdp2[i])
+    
+  }
+},
+movie.name = "~/Desktop/animation.gif")
+
+```
+
+See the result
+
+<iframe width="600" height="600" src="/home/olga/Desktop/animation.gif" frameborder="0" allowfullscreen></iframe>
